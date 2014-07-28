@@ -15,8 +15,8 @@
 #      NOTE score is optional if > or < is used to indicate a winner
 #   4) command: any other words are ignored except the following commands:
 #      * delete: deletes a matching #pp match from the history
-#      * shout: SHOUTS THE RESULTS INTO #general FOR ALL TO SEE
-#      * quiet: save the match, but don't announce it
+#      * shout: SHOUTS THE RESULTS FOR ALL TO SEE
+#      * quiet: save the match, but don't echo it
 module.exports = (robot) ->
   robot.hear /(#pp|#pingpong)/i, (msg) ->
     text = msg.message.text
@@ -105,9 +105,12 @@ module.exports = (robot) ->
           (match.loser == match_details.loser) &&
           (match.loser_score == match_details.loser_score)
         if found
-          msg.send "Found match at #{i}"
+          msg.send "OK, I deleted that match record."
           matches.splice(i, 1)
           break
+        else
+          msg.send "I couldn't find the match you're trying to delete... sorry!"
+          return
     robot.brain.set("pingpong.matches", matches)
 
     # Remember the records
