@@ -18,7 +18,7 @@
 #      * delete: deletes a matching #pp match from the history
 #      * quiet: save the match, but don't echo it
 module.exports = (robot) ->
-  robot.hear /(pp|pingpong)/i, (msg) ->
+  robot.hear /( pp| pingpong|pp |pingpong )/i, (msg) ->
     console.log("Heard message: '#{msg.message.text}'")
     text = msg.message.text
 
