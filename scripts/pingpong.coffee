@@ -87,6 +87,10 @@ module.exports = (robot) ->
       # Regular announcement
       msg.send "Congrats, #{winner}! Better luck next time, #{loser}..."
 
+    # Ensure brain is initialized
+    robot.brain.data.pingpong ||= {}
+    robot.brain.data.pingpong.matches ||= []
+
     # Remember the match
     match_details = {
       winner: winner,
@@ -94,36 +98,35 @@ module.exports = (robot) ->
       loser: loser,
       loser_score: loser_score
     }
-    # Getting & setting an array like this seems so dumb but the 'brain' interface doesn't expose real redis methods
-    matches = robot.brain.get("pingpong.matches") || []
     if !delete_match
-      matches.push(match_details)
+      robot.brain.data.pingpong.matches.push(match_details)
     else
-      for match, i in matches by -1
+      for match, i in robot.brain.data.pingpong.matches by -1
         found = (match.winner == match_details.winner) &&
           (match.winner_score == match_details.winner_score) &&
           (match.loser == match_details.loser) &&
           (match.loser_score == match_details.loser_score)
         if found
           msg.send "OK, I deleted that match record."
-          matches.splice(i, 1)
+          robot.brain.data.pingpong.matches.splice(i, 1)
           break
         else
           msg.send "I couldn't find the match you're trying to delete... sorry!"
           return
-    robot.brain.set("pingpong.matches", matches)
 
     # Remember the records
     if found || !delete_match
-      winner_wins = robot.brain.get("pingpong.#{winner}.wins") || 0
-      loser_losses = robot.brain.get("pingpong.#{loser}.losses") || 0
-      winner_wins += if !delete_match then 1 else -1
-      loser_losses += if !delete_match then 1 else -1
-      robot.brain.set("pingpong.#{winner}.wins", winner_wins)
-      robot.brain.set("pingpong.#{loser}.losses", loser_losses)
+      robot.brain.data.pingpong["#{winner}"] ||= {wins: 0, losses: 0}
+      robot.brain.data.pingpong["#{loser}"] ||= {wins: 0, losses: 0}
+      if !delete_match
+        robot.brain.data.pingpong["#{winner}"].wins += 1
+        robot.brain.data.pingpong["#{loser}"].losses += 1
+      else
+        robot.brain.data.pingpong["#{winner}"].wins -= 1
+        robot.brain.data.pingpong["#{loser}"].losses -= 1
 
   robot.respond /.*?(\d+)?\s*(?:pingpong|pp)\s+match(?:es)?\s*(\d+)?/i, (msg) ->
-    matches = robot.brain.get("pingpong.matches")
+    matches = robot.brain.data.pingpong.matches
     if !matches?
       msg.send "I don't remember any ping pong matches yet. Go play some!"
       return
@@ -154,12 +157,29 @@ module.exports = (robot) ->
     if !user?
       msg.send "Include a <@user> so I can tell you their pingpong record!"
       return
-
-    wins = robot.brain.get("pingpong.#{user}.wins") || 0
-    losses = robot.brain.get("pingpong.#{user}.losses") || 0
+   
+    if !robot.brain.data.pingpong["#{user}"]?
+      msg.send "#{user} hasn't played any games yet. Get on that!"
+      return
+    wins = robot.brain.data.pingpong["#{user}"].wins || 0
+    losses = robot.brain.data.pingpong["#{user}"].losses || 0
     winrate = 100.0 * wins / (wins + losses)
 
     if wins + losses > 0
       msg.send "#{user}'s pingpong record is: #{wins} wins, #{losses} losses (#{winrate}%)"
     else
       msg.send "#{user} hasn't played any games yet. Get on that!"
+
+  robot.respond /restore\s*(?:pingpong|pp)\s+backup:(.+)/i, (msg) ->
+    backup_str = msg.match[0]
+    msg.send "Restoring from backup: #{backup_str}"
+    backup = JSON.parse(backup_str)
+    if backup?
+      robot.brain.data.pingpong = backup
+      msg.send "Success!"
+
+  robot.respond /export\s*(?:pingpong|pp)\s+backup/i, (msg) ->
+    msg.send "OK, here's a backup of the pingpong records:"
+    backup = JSON.stringify(robot.brain.data.pingpong)
+    msg.send backup
+
