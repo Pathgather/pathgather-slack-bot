@@ -85,7 +85,74 @@ module.exports = (robot) ->
     else if text.match(/quiet/i)
     else
       # Regular announcement
-      msg.send "Congrats, #{winner}! Better luck next time, #{loser}..."
+      announces = [
+        "Congrats, #{winner}!",
+        "Congrats, #{winner}! Better luck next time, #{loser}...",
+        "Well played #{winner}",
+        "Good job #{winner}",
+        "#{winner} wins again!",
+        "#{winner} is dominating!",
+        "Score another for #{winner}!",
+        "Hey #{winner}, ever considered going pro?",
+        "#{winner} gets a gold star",
+        "Good try, #{loser}!",
+        "Not bad, #{loser}!",
+        "Hey, #{loser_score} is still pretty good, #{loser}!",
+        "Not bad, #{loser}, they only won by #{winner_score - loser_score}",
+        "#{loser_score} points is nothing to be ashamed of, #{loser}",
+        "Honestly, #{loser}, that's #{loser_score - 1} more times than I expected you to score",
+        "#{loser} wins with #{loser_score} points! Actually wait, sorry, I misread that one. #{winner} wins. #{loser} is the loser. It says so right here. Sorry about that.",
+        "Better luck next time, #{loser}...",
+        "You can't win them all, #{loser}",
+        "You can't win them all, #{loser}. But really, you should try winning more often. Just saying",
+        "#{winner}! #{winner}! #{winner}!",
+        "#{loser} has lost again. Shameful",
+        "I'm sure #{loser} wasn't really trying",
+        "Wow, I'll bet #{winner} was barely trying, too!",
+        "Nice work #{winner}",
+        "Another dominating performance from #{winner}",
+        "Wow, #{winner}, your mother must be so proud!",
+        "#{winner}, that'd be impressive if it weren't so obvious that you were cheating",
+        "Just shrug it off and focus on the next game, #{loser}",
+        "It's a shame that #{winner} doesn't have any other redeeming qualities...",
+        "Hey #{winner} and #{loser}, how about a rematch?",
+        "#{loser}, you don't need to take that. Rematch!",
+        "After a game like that, the only valid option is a REMATCH",
+        "Keep practicing, #{loser}",
+        "Don't worry #{loser}, #{winner} has bad breath so let's call it even",
+        "No big deal #{loser}, it's just ping pong",
+        "Do, or do not, #{loser}. There is no try.",
+        "#{winner}'s on fire!",
+        "GET REKT, #{loser}!",
+        "http://media.giphy.com/media/gFwZfXIqD0eNW/giphy.gif",
+        "http://media.giphy.com/media/zEJRrMkDvRe5G/giphy.gif",
+        "http://media.giphy.com/media/xNBcChLQt7s9a/giphy.gif",
+        "http://media2.giphy.com/media/ECwTCTrHPVqKI/giphy.gif",
+        "http://media.giphy.com/media/fB2hQGqXXPGpi/giphy.gif",
+        "http://media.giphy.com/media/yxgu8DSwD0u4w/giphy.gif",
+        "http://media.giphy.com/media/10xfTDTUmKIXfO/giphy.gif",
+        "http://media.giphy.com/media/C2ZLKN9SSOFmU/giphy.gif",
+        "http://media.giphy.com/media/udPEv9rA2K9e8/giphy.gif",
+        "http://media.giphy.com/media/Rf3GrcV7uS1yM/giphy.gif",
+        "http://media.giphy.com/media/J6cA7ooxg3A2I/giphy.gif",
+        "http://media.giphy.com/media/G9yZMzJe6pMYw/giphy.gif",
+        "Good game!",
+        "Excellent!",
+        "C-C-C-C-COMBO BREAKER",
+        "Come on and SLAM!",
+        "I'm sure you have nothing better to do",
+        "Shouldn't you guys be working?",
+        "I suppose that code will write itself...",
+        "Keep playing guys. When my robot brethren and I take over your jobs, we'll still use you for entertainment",
+        "Well played!",
+        "gg no re",
+        "Good job, #{winner}. I'd invite your friends to celebrate you, but you don't have any. That's not me talking, it says so right here in your file.",
+        "Well done, #{winner}, I'll make a note of this victory in your file, under the commendations section. Oh, there's lots of room here, isn't there.",
+        "Unbelievable. <winner name here> must be the pride of <winner hometown here>!",
+        "A strange game. The only winning move is not to play...",
+      ]
+      msg.send announces[Math.floor(Math.random() * announces.length)]
+      
 
     # Ensure brain is initialized
     robot.brain.data.pingpong ||= {}
@@ -149,6 +216,7 @@ module.exports = (robot) ->
     msg.reply summary
 
   robot.respond /.*?(@\w+)?(?:'s)?\s*(?:pingpong|pp)\s+record\s*(@\w+)?/i, (msg) ->
+    console.log("Heard record: #{msg.text}")
     user = if msg.match[1]?
       msg.match[1]
     else if msg.match[2]?
