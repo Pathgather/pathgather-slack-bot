@@ -170,13 +170,15 @@ module.exports = (robot) ->
     else
       msg.send "#{user} hasn't played any games yet. Get on that!"
 
-  robot.respond /restore\s*(?:pingpong|pp)\s+backup:(.+)/i, (msg) ->
-    backup_str = msg.match[0]
-    msg.send "Restoring from backup: #{backup_str}"
+  robot.respond /import\s*(?:pingpong|pp)\s+backup:(.+)/i, (msg) ->
+    backup_str = msg.match[1]
+    msg.send "Importing pingpong records from backup..."
     backup = JSON.parse(backup_str)
     if backup?
       robot.brain.data.pingpong = backup
       msg.send "Success!"
+    else
+      msg.send "Failed to parse backup as JSON, sorry!"
 
   robot.respond /export\s*(?:pingpong|pp)\s+backup/i, (msg) ->
     msg.send "OK, here's a backup of the pingpong records:"
