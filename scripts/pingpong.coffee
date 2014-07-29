@@ -19,6 +19,7 @@
 #      * quiet: save the match, but don't echo it
 module.exports = (robot) ->
   robot.hear /(#pp|#pingpong)/i, (msg) ->
+    console.log("Heard message: '#{msg.message.text}'")
     text = msg.message.text
 
     # Detect users (@user1:@user2)
@@ -193,6 +194,7 @@ module.exports = (robot) ->
         robot.brain.data.pingpong["#{loser}"].losses -= 1
 
   robot.respond /.*?(\d+)?\s*(?:pingpong|pp)\s+match(?:es)?\s*(\d+)?/i, (msg) ->
+    console.log("Responding to message: '#{msg.message.text}'")
     matches = robot.brain.data.pingpong.matches
     if !matches?
       msg.send "I don't remember any ping pong matches yet. Go play some!"
@@ -216,7 +218,7 @@ module.exports = (robot) ->
     msg.reply summary
 
   robot.respond /.*?(@\w+)?(?:'s)?\s*(?:pingpong|pp)\s+record\s*(@\w+)?/i, (msg) ->
-    console.log("Heard record: #{msg.text}")
+    console.log("Responding to message: '#{msg.message.text}'")
     user = if msg.match[1]?
       msg.match[1]
     else if msg.match[2]?
@@ -239,6 +241,7 @@ module.exports = (robot) ->
       msg.send "#{user} hasn't played any games yet. Get on that!"
 
   robot.respond /import\s*(?:pingpong|pp)\s+backup:(.+)/i, (msg) ->
+    console.log("Responding to message: '#{msg.message.text}'")
     backup_str = msg.match[1]
     msg.send "Importing pingpong records from backup..."
     backup = JSON.parse(backup_str)
@@ -249,6 +252,7 @@ module.exports = (robot) ->
       msg.send "Failed to parse backup as JSON, sorry!"
 
   robot.respond /export\s*(?:pingpong|pp)\s+backup/i, (msg) ->
+    console.log("Responding to message: '#{msg.message.text}'")
     msg.send "OK, here's a backup of the pingpong records:"
     backup = JSON.stringify(robot.brain.data.pingpong)
     msg.send backup
