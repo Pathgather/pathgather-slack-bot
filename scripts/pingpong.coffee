@@ -10,7 +10,7 @@
 #   Listens for a message containing #pingpong or #pp, then looks for the score and remembers it.
 #   Order doesn't matter, you just need:
 #   1) hashtag: #pingpong or #pp
-#   2) users: @user1:@user2 or @user1>@user2 or @user1<@user2
+#   2) users: @user1:@user2 or @user1-@user2 @user1>@user2 or @user1<@user2
 #   3) score: 21:4, 21:19, 23:21, etc. First score is @user1's, second is @user2's (duh).
 #      NOTE score is optional if > or < is used to indicate a winner
 #   4) command: any other words are ignored except the following commands:
@@ -22,7 +22,7 @@ module.exports = (robot) ->
     text = msg.message.text
 
     # Detect users (@user1:@user2)
-    matches = text.match(/(@\w+)([:<>])(@\w+)/ig)
+    matches = text.match(/(@\w+)([:-<>])(@\w+)/ig)
     if !matches? or matches.length > 1
       msg.send "To record a ping pong match, I need to know who played. " +
         "Include exactly one '<@user>:<@user>' in your message so I can understand you!"
@@ -58,7 +58,7 @@ module.exports = (robot) ->
       loser_score = Math.min(score1, score2)
 
     # Determine the winner and loser
-    if user_separator == ':'
+    if user_separator == ':' || user_separator == '-'
       if score1 > score2
         winner = user1
         loser = user2
@@ -110,9 +110,9 @@ module.exports = (robot) ->
           msg.send "OK, I deleted that match record."
           robot.brain.data.pingpong.matches.splice(i, 1)
           break
-        else
-          msg.send "I couldn't find the match you're trying to delete... sorry!"
-          return
+      if !found
+        msg.send "I couldn't find the match you're trying to delete... sorry!"
+        return
 
     # Remember the records
     if found || !delete_match
@@ -166,7 +166,7 @@ module.exports = (robot) ->
     winrate = 100.0 * wins / (wins + losses)
 
     if wins + losses > 0
-      msg.send "#{user}'s pingpong record is: #{wins} wins, #{losses} losses (#{winrate}%)"
+      msg.send "#{user}'s pingpong record is: #{wins} wins, #{losses} losses (#{winrate.toFixed(2)}%)"
     else
       msg.send "#{user} hasn't played any games yet. Get on that!"
 
