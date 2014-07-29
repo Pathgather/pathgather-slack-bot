@@ -2,8 +2,9 @@
 #   Keep the ping pong scores. Somebody has to do it
 #
 # Commands:
-#   pingpong - hears a ping pong score, and remembers it (can also use #pp)
+#   pingpong - hears a ping pong score, and remembers it (can also use pp)
 #   Hubot [<number>] pingpong matches [<number>] - responds with the last <number> matches (default: 5)
+#   Hubot delete pingpong match - deletes the last pingpong match record
 #   Hubot [<user>] pingpong record [<user>] - responds with W/L record for <user>
 #
 # Notes:
@@ -15,18 +16,16 @@
 #      NOTE score is optional if > or < is used to indicate a winner
 #   4) command: any other words are ignored except the following commands:
 #      * delete: deletes a matching #pp match from the history
-#      * shout: SHOUTS THE RESULTS FOR ALL TO SEE
 #      * quiet: save the match, but don't echo it
 module.exports = (robot) ->
-  robot.hear /(#pp|#pingpong)/i, (msg) ->
+  robot.hear /(pp|pingpong)/i, (msg) ->
     console.log("Heard message: '#{msg.message.text}'")
     text = msg.message.text
 
     # Detect users (@user1:@user2)
     matches = text.match(/(@\w+)([-:<>])(@\w+)/ig)
     if !matches? or matches.length > 1
-      msg.send "To record a ping pong match, I need to know who played. " +
-        "Include exactly one '<@user>:<@user>' in your message so I can understand you!"
+      console.log("Cannot record match, missing @user:@user group, or found more than one")
       return
     users = text.match(/(@\w+)([-:<>])(@\w+)/i)
     user1 = users[1]
@@ -35,12 +34,14 @@ module.exports = (robot) ->
 
     # Detect invalid users
     if user1 == user2
+      console.log("Cannot record match, user playing against itself")
       msg.send "Silly #{user1}, you can't play ping pong against yourself!"
       return
 
     # Detect score (21:2)
     matches = text.match(/(\d+)[:-](\d+)/ig)
     if (!matches? and (user_separator == ':' or user_separator == '-')) or (matches? && matches.length > 1)
+      console.log("Cannot record match, missing score")
       msg.send "To record a ping pong match, I need to know the score. " +
         "Include exactly one '<score>:<score>' in your message so I can understand you!"
       return
@@ -51,6 +52,7 @@ module.exports = (robot) ->
 
       # Detect invalid scores
       if score1 == score2 or (score1 < 21 and score2 < 21)
+        console.log("Cannot record match, invalid score: #{scores[0]}")
         msg.send "The ping pong score #{scores[0]} doesn't look right... try that again?"
         return
 
@@ -77,12 +79,6 @@ module.exports = (robot) ->
     delete_match = false
     if text.match(/delete/i)
       delete_match = true
-    else if text.match(/shout/i)
-      # TODO: shout into #general to be extra obnoxious
-      if scores?
-        msg.send "#{winner} just crushed #{loser} in ping pong, #{winner_score}:#{loser_score}!".toUpperCase()
-      else
-        msg.send "#{winner} just crushed #{loser} in ping pong!".toUpperCase()
     else if text.match(/quiet/i)
     else
       # Regular announcement
@@ -95,9 +91,11 @@ module.exports = (robot) ->
         "#{winner} is dominating!",
         "Score another for #{winner}!",
         "Hey #{winner}, ever considered going pro?",
-        "#{winner} gets a gold star",
+        "#{winner} gets a gold star: :star:",
+        "#{winner} gets a cookie: :cookie:",
+        "#{winner} gets some cake: :cake:",
         "Good try, #{loser}!",
-        "Not bad, #{loser}!",
+        "You'll get 'em next time, #{loser}!",
         "Hey, #{loser_score} is still pretty good, #{loser}!",
         "Not bad, #{loser}, they only won by #{winner_score - loser_score}",
         "#{loser_score} points is nothing to be ashamed of, #{loser}",
@@ -137,6 +135,10 @@ module.exports = (robot) ->
         "http://media.giphy.com/media/Rf3GrcV7uS1yM/giphy.gif",
         "http://media.giphy.com/media/J6cA7ooxg3A2I/giphy.gif",
         "http://media.giphy.com/media/G9yZMzJe6pMYw/giphy.gif",
+        ":smile:",
+        ":jamie:",
+        ":thumbsup",
+        ":sunglasses:",
         "Good game!",
         "Excellent!",
         "C-C-C-C-COMBO BREAKER",
@@ -166,18 +168,22 @@ module.exports = (robot) ->
       loser_score: loser_score
     }
     if !delete_match
+      console.log("Record match: #{winner}>#{loser} (#{winner_score}:#{loser_score})")
       robot.brain.data.pingpong.matches.push(match_details)
     else
+      console.log("Attempt to delete match: #{winner}>#{loser} (#{winner_score}:#{loser_score})")
       for match, i in robot.brain.data.pingpong.matches by -1
         found = (match.winner == match_details.winner) &&
           (match.winner_score == match_details.winner_score) &&
           (match.loser == match_details.loser) &&
           (match.loser_score == match_details.loser_score)
         if found
+          console.log("Match found and deleted")
           msg.send "OK, I deleted that match record."
           robot.brain.data.pingpong.matches.splice(i, 1)
           break
       if !found
+        console.log("Couldn't find match to delete")
         msg.send "I couldn't find the match you're trying to delete... sorry!"
         return
 
@@ -186,9 +192,11 @@ module.exports = (robot) ->
       robot.brain.data.pingpong["#{winner}"] ||= {wins: 0, losses: 0}
       robot.brain.data.pingpong["#{loser}"] ||= {wins: 0, losses: 0}
       if !delete_match
+        console.log("Decremented W/L records")
         robot.brain.data.pingpong["#{winner}"].wins += 1
         robot.brain.data.pingpong["#{loser}"].losses += 1
       else
+        console.log("Incremented W/L records")
         robot.brain.data.pingpong["#{winner}"].wins -= 1
         robot.brain.data.pingpong["#{loser}"].losses -= 1
 
@@ -197,6 +205,18 @@ module.exports = (robot) ->
     matches = robot.brain.data.pingpong.matches
     if !matches?
       msg.send "I don't remember any ping pong matches yet. Go play some!"
+      return
+
+    if msg.message.text.match(/(delete|remove)/i)
+      last = matches.pop()
+      robot.brain.data.pingpong["#{last.winner}"].wins -= 1
+      robot.brain.data.pingpong["#{last.loser}"].losses -= 1
+      console.log("Deleted last match and decremented W/L records")
+      summary = "Removed last match:"
+      summary += "  #{last.winner} > #{last.loser}"
+      if last.winner_score? && last.loser_score?
+        summary += " (#{last.winner_score}:#{last.loser_score})"
+      msg.send summary
       return
 
     number = if msg.match[1]?
@@ -238,4 +258,3 @@ module.exports = (robot) ->
       msg.send "#{user}'s pingpong record is: #{wins} wins, #{losses} losses (#{winrate.toFixed(2)}%)"
     else
       msg.send "#{user} hasn't played any games yet. Get on that!"
-
