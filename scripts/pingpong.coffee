@@ -23,12 +23,12 @@ module.exports = (robot) ->
     text = msg.message.text
 
     # Detect users (@user1:@user2)
-    matches = text.match(/(@\w+)([:-<>])(@\w+)/ig)
+    matches = text.match(/(@\w+)([-:<>])(@\w+)/ig)
     if !matches? or matches.length > 1
       msg.send "To record a ping pong match, I need to know who played. " +
         "Include exactly one '<@user>:<@user>' in your message so I can understand you!"
       return
-    users = text.match(/(@\w+)([:<>])(@\w+)/i)
+    users = text.match(/(@\w+)([-:<>])(@\w+)/i)
     user1 = users[1]
     user_separator = users[2]
     user2 = users[3]
@@ -39,13 +39,13 @@ module.exports = (robot) ->
       return
 
     # Detect score (21:2)
-    matches = text.match(/(\d+):(\d+)/ig)
-    if (!matches? and user_separator == ':') or (matches? && matches.length > 1)
+    matches = text.match(/(\d+)[:-](\d+)/ig)
+    if (!matches? and (user_separator == ':' or user_separator == '-')) or (matches? && matches.length > 1)
       msg.send "To record a ping pong match, I need to know the score. " +
         "Include exactly one '<score>:<score>' in your message so I can understand you!"
       return
     if matches?
-      scores = text.match(/(\d+):(\d+)/)
+      scores = text.match(/(\d+)[:-](\d+)/)
       score1 = parseInt(scores[1])
       score2 = parseInt(scores[2])
 
@@ -239,9 +239,3 @@ module.exports = (robot) ->
     else
       msg.send "#{user} hasn't played any games yet. Get on that!"
 
-  robot.respond /import pingpong database please/i, (msg) ->
-    console.log("Responding to message: '#{msg.message.text}'")
-    msg.send "OK, I can do that."
-    backup = {"matches":[{"winner":"@jamie","winner_score":21,"loser":"@neville","loser_score":15},{"winner":"@jamie","winner_score":21,"loser":"@neville","loser_score":9},{"winner":"@jamie","winner_score":21,"loser":"@eric","loser_score":10},{"winner":"@eric","winner_score":21,"loser":"@neville","loser_score":9},{"winner":"@eric","winner_score":21,"loser":"@neville","loser_score":19},{"winner":"@jamie","winner_score":21,"loser":"@eric","loser_score":17},{"winner":"@eric","winner_score":21,"loser":"@neville","loser_score":14},{"winner":"@jamie","winner_score":21,"loser":"@eric","loser_score":19},{"winner":"@jamie","winner_score":21,"loser":"@neville","loser_score":16},{"winner":"@eric","winner_score":21,"loser":"@neville","loser_score":13},{"winner":"@jamie","winner_score":21,"loser":"@eric","loser_score":10},{"winner":"@jamie","winner_score":21,"loser":"@neville","loser_score":15},{"winner":"@jamie","winner_score":21,"loser":"@neville","loser_score":13},{"winner":"@jamie","winner_score":21,"loser":"@eric","loser_score":12},{"winner":"@eric","winner_score":24,"loser":"@neville","loser_score":22},{"winner":"@jamie","winner_score":21,"loser":"@eric","loser_score":16},{"winner":"@eric","winner_score":21,"loser":"@jamie","loser_score":17},{"winner":"@jamie","winner_score":21,"loser":"@eric","loser_score":5},{"winner":"@jamie","winner_score":21,"loser":"@neville","loser_score":13},{"winner":"@jamie","winner_score":21,"loser":"@eric","loser_score":14},{"winner":"@jamie","winner_score":21,"loser":"@neville","loser_score":19},{"winner":"@jamie","winner_score":21,"loser":"@eric","loser_score":16},{"winner":"@eric","winner_score":23,"loser":"@neville","loser_score":21},{"winner":"@eric","winner_score":21,"loser":"@neville","loser_score":16},{"winner":"@eric","winner_score":22,"loser":"@neville","loser_score":20},{"winner":"@jamie","winner_score":21,"loser":"@neville","loser_score":15},{"winner":"@jamie","winner_score":21,"loser":"@neville","loser_score":19},{"winner":"@jamie","winner_score":21,"loser":"@eric","loser_score":6},{"winner":"@jamie","winner_score":21,"loser":"@neville","loser_score":11},{"winner":"@jamie","winner_score":21,"loser":"@eric","loser_score":7},{"winner":"@eric","winner_score":21,"loser":"@neville","loser_score":19},{"winner":"@jamie","winner_score":21,"loser":"@eric","loser_score":14},{"winner":"@jamie","winner_score":21,"loser":"@neville","loser_score":16},{"winner":"@eric","winner_score":21,"loser":"@neville","loser_score":11},{"winner":"@eric","winner_score":21,"loser":"@jamie","loser_score":18},{"winner":"@eric","winner_score":21,"loser":"@neville","loser_score":14},{"winner":"@eric","winner_score":21,"loser":"@jamie","loser_score":16},{"winner":"@eric","winner_score":21,"loser":"@neville","loser_score":16},{"winner":"@neville","winner_score":21,"loser":"@eric","loser_score":18},{"winner":"@eric","winner_score":21,"loser":"@neville","loser_score":14},{"winner":"@jamie","winner_score":21,"loser":"@neville","loser_score":15},{"winner":"@jamie","winner_score":21,"loser":"@neville","loser_score":15},{"winner":"@jamie","winner_score":21,"loser":"@neville","loser_score":12},{"winner":"@jamie","winner_score":21,"loser":"@neville","loser_score":15},{"winner":"@jamie","winner_score":21,"loser":"@neville","loser_score":12},{"winner":"@jamie","winner_score":21,"loser":"@neville","loser_score":15},{"winner":"@jamie","winner_score":21,"loser":"@neville","loser_score":11},{"winner":"@jamie","winner_score":21,"loser":"@neville","loser_score":11},{"winner":"@jamie","winner_score":21,"loser":"@neville","loser_score":15},{"winner":"@eric","winner_score":21,"loser":"@neville","loser_score":17},{"winner":"@jamie","winner_score":21,"loser":"@eric","loser_score":18},{"winner":"@jamie","winner_score":22,"loser":"@eric","loser_score":20},{"winner":"@eric","winner_score":21,"loser":"@neville","loser_score":17},{"winner":"@jamie","winner_score":21,"loser":"@neville","loser_score":13},{"winner":"@jamie","winner_score":21,"loser":"@eric","loser_score":13},{"winner":"@eric","winner_score":21,"loser":"@neville","loser_score":8},{"winner":"@eric","winner_score":21,"loser":"@neville","loser_score":13},{"winner":"@jamie","winner_score":22,"loser":"@eric","loser_score":20},{"winner":"@jamie","winner_score":21,"loser":"@neville","loser_score":13},{"winner":"@jamie","winner_score":23,"loser":"@eric","loser_score":21},{"winner":"@eric","winner_score":22,"loser":"@neville","loser_score":20},{"winner":"@jamie","winner_score":22,"loser":"@eric","loser_score":20},{"winner":"@jamie","winner_score":21,"loser":"@neville","loser_score":10},{"winner":"@jamie","winner_score":21,"loser":"@eric","loser_score":11},{"winner":"@jamie","winner_score":21,"loser":"@neville","loser_score":7},{"winner":"@jamie","winner_score":21,"loser":"@neville","loser_score":15},{"winner":"@jamie","winner_score":21,"loser":"@eric","loser_score":7},{"winner":"@eric","winner_score":21,"loser":"@neville","loser_score":17},{"winner":"@jamie","winner_score":21,"loser":"@neville","loser_score":14},{"winner":"@eric","winner_score":21,"loser":"@neville","loser_score":19},{"winner":"@eric","winner_score":21,"loser":"@neville","loser_score":17},{"winner":"@neville","winner_score":21,"loser":"@eric","loser_score":17},{"winner":"@neville","winner_score":21,"loser":"@jamie","loser_score":19},{"winner":"@eric","winner_score":21,"loser":"@neville","loser_score":7},{"winner":"@eric","winner_score":21,"loser":"@neville","loser_score":8},{"winner":"@jamie","winner_score":21,"loser":"@neville","loser_score":13},{"winner":"@eric","winner_score":21,"loser":"@jamie","loser_score":19},{"winner":"@jamie","winner_score":21,"loser":"@neville","loser_score":7},{"winner":"@jamie","winner_score":21,"loser":"@neville","loser_score":16},{"winner":"@eric","winner_score":23,"loser":"@neville","loser_score":21}],"@jamie":{"wins":49,"losses":5},"@neville":{"wins":3,"losses":53},"@eric":{"wins":28,"losses":22}}
-    robot.brain.data.pingpong = backup
-    msg.send "OK, done"
