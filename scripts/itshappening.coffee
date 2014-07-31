@@ -8,9 +8,14 @@
 #   None
 #
 # Commands:
-#   it's happening - IT'S HAPPENING!
+#   it's happening - Hears people mention it's happening, and replies IT'S HAPPENING!
+#   <something> is happening - Hears people mention something is happening, and replies IT'S HAPPENING
 
 module.exports = (robot) ->
 
   robot.hear /it('s)?\s*\w*\s*(to )?happen(ing)?/i, (msg) ->
-    msg.send "http://imgur.com/7drHiqr"
+    msg.send "http://imgur.com/7drHiqr.gif"
+
+  robot.hear /\w+(?:\s+is|'s)\s+happening/i, (msg) ->
+    msg.send "http://imgur.com/7drHiqr.gif"
+
