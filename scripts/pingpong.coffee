@@ -258,3 +258,43 @@ module.exports = (robot) ->
       msg.send "#{user}'s pingpong record is: #{wins} wins, #{losses} losses (#{winrate.toFixed(2)}%)"
     else
       msg.send "#{user} hasn't played any games yet. Get on that!"
+
+  robot.respond /\s*new (?:pingpong|pp) season ?(please)?/i, (msg) ->
+    please = msg.match[1]?
+    unless please
+      msg.send "If you want me to reset the current pingpong season, you'll have to say the magic word."
+      return
+    season = robot.brain.data.pingpong
+    robot.brain.data.pingpong_seasons ||= []
+    robot.brain.data.pingpong_seasons.push(season)
+    robot.brain.data.pingpong = {}
+    msg.send "OK, I've reset the current pingpong season. Good luck, have fun!"
+
+  robot.respond /(?:pingpong|pp) season (\d+) results/i, (msg) ->
+    number = msg.match[1]
+    season = if number? then robot.brain.data.pingpong_seasons[number - 1] else null
+    if season?
+      matches = season.matches
+      unless matches? && matches.length
+        msg.send "There doesn't appear to be any match data for season #{number}, sorry!"
+        return
+      total = matches.length
+      summary = "For pingpong season ##{number}:\n" +
+        "  Total Matches: #{total}\n" +
+        "  Season Records:\n"
+      records = []
+      for own key, value of season
+        if key[0] == "@"
+          wins = value.wins || 0
+          losses = value.losses || 0
+          winrate = 100.0 * wins / (wins + losses)
+          if wins + losses > 0
+            records.push({user: key, wins: wins, losses: losses, winrate: winrate})
+      records.sort((a,b) -> b.winrate - a.winrate)
+      for record in records
+        summary += "    #{record.user}: #{record.wins} wins, #{record.losses} losses (#{record.winrate.toFixed(2)}%)\n"
+      msg.send summary
+    else
+      msg.send "Sorry, I don't have any results for pingpong season #{number}..."
+
+
