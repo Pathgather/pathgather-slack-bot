@@ -15,6 +15,7 @@ module.exports = (robot) ->
     if robot.adapter.client?
       console.log "Found slack client!"
       clientUsers = robot.adapter.client.users
+      console.log clientUsers
       for own key, user of clientUsers
         console.log user.name if !user.is_bot && !user.deleted && user.name? && user.profile.email_address?
 
