@@ -46,7 +46,7 @@ module.exports = (robot) ->
   robot.respond /standup users/i, (msg) ->
     console.log("Responding to message: '#{msg.message.text}'")
     users = getStandupUsers(robot)
-    msg.reply = "Found #{users.length} users for standup: #{(users.map (u) -> u.name).join(", ")}"
+    msg.reply "Found #{users.length} users for standup: #{(users.map (u) -> u.name).join(", ")}"
 
   robot.respond /standup link( (http\S+))?/i, (msg) ->
     # TODO: store standup links per room
