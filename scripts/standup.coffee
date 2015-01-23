@@ -60,7 +60,7 @@ module.exports = (robot) ->
     else
       msg.reply "No one has told me the standup link yet. Use \"standup link <new>\" to tell me, and I'll remember it for later!"
 
-  robot.respond /standup me( (order|random))?/i, (msg) ->
+  robot.respond /standup me( random)?/i, (msg) ->
     console.log("Responding to message: '#{msg.message.text}'")
 
     # Make sure we have users and a link
@@ -104,7 +104,7 @@ module.exports = (robot) ->
       last_date = new Date(robot.brain.data.standup.last_timestamp)
     order = robot.brain.data.standup.order || usernames
     date = new Date()
-    if !last_date? || last_date.getMonth() != date.getMonth()
+    if !last_date? || last_date.getMonth() != date.getMonth() || msg.match[1]?
       # First standup, or it's a new month
       msg.send "Time to randomize the order!"
       order = shuffleArray(order)
