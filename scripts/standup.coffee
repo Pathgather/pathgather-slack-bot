@@ -98,18 +98,35 @@ module.exports = (robot) ->
     msg.send "To join in via the Internets: #{robot.brain.data.standup.link}"
 
     # Pick the order
+    usernames = users.map (u) -> u.name
     robot.brain.data.standup ||= {}
     if robot.brain.data.standup.last_timestamp?
       last_date = new Date(robot.brain.data.standup.last_timestamp)
-    order = robot.brain.data.standup.order
+    order = robot.brain.data.standup.order || usernames
     date = new Date()
-    if !order? || (last_date? && last_date.getMonth() != date.getMonth())
-      # Order hasn't been defined yet, or it's a new month
+    if !last_date? || last_date.getMonth() != date.getMonth()
+      # First standup, or it's a new month
       msg.send "Time to randomize the order!"
-      order = shuffleArray(users.map (u) -> u.name)
+      order = shuffleArray(order)
     else if last_date? && last_date.toDateString() != date.toDateString()
       # Last standup was on a different calendar day; cycle the order
       order.push(order.shift())
+
+    # Remove old users
+    # TODO: if standups are defined per-room, this logic needs to be smarter about determining who
+    # has left the company
+    old_users = (name for name in order when usernames.indexOf(name) < 0)
+    if old_users.length > 0
+      order = (name for name in order when usernames.indexOf(name) >= 0) # remove old users
+      msg.send "Removed #{old_users.join(", ")} from the standup"
+
+    # Add new users
+    new_users = (name for name in usernames when order.indexOf(name) < 0)
+    if new_users.length > 0
+      order = order.concat(shuffleArray(new_users))
+      msg.send "Added #{new_users.join(", ")} to the standup"
+
+    # Announce the order
     msg.send "Standup order for #{date.toDateString()}: #{order.join(", ")}"
 
     # Remember the deets
