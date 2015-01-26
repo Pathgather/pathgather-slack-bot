@@ -1,1 +1,1 @@
-web: bin/hubot --adapter slack --name pgbot 
+app: bin/hubot --adapter slack --name pgbot
