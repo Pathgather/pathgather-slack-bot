@@ -73,6 +73,7 @@ module.exports = (robot) ->
       return
 
     # Announce this fabulous event
+    reply = ""
     intros = [
       "It's time to stand!",
       "It's time to stand!",
@@ -92,10 +93,10 @@ module.exports = (robot) ->
     ]
     intro = msg.random intros
     intro = intro() if typeof intro == 'function'
-    msg.send intro
+    reply += intro + "\n"
 
     # Drop the link
-    msg.send "To join in via the Internets: #{robot.brain.data.standup.link}"
+    reply += "To join in via the Internets: #{robot.brain.data.standup.link}\n"
 
     # Pick the order
     usernames = users.map (u) -> u.name
@@ -106,7 +107,7 @@ module.exports = (robot) ->
     date = new Date()
     if !last_date? || last_date.getMonth() != date.getMonth() || msg.match[1]?
       # First standup, or it's a new month
-      msg.send "Time to randomize the order!"
+      reply += "Time to randomize the order!\n"
       order = shuffleArray(order)
     else if last_date? && last_date.toDateString() != date.toDateString()
       # Last standup was on a different calendar day; cycle the order
@@ -118,16 +119,17 @@ module.exports = (robot) ->
     old_users = (name for name in order when usernames.indexOf(name) < 0)
     if old_users.length > 0
       order = (name for name in order when usernames.indexOf(name) >= 0) # remove old users
-      msg.send "Removed #{old_users.join(", ")} from the standup"
+      reply += "Removed #{old_users.join(", ")} from the standup\n"
 
     # Add new users
     new_users = (name for name in usernames when order.indexOf(name) < 0)
     if new_users.length > 0
       order = order.concat(shuffleArray(new_users))
-      msg.send "Added #{new_users.join(", ")} to the standup"
+      reply += "Added #{new_users.join(", ")} to the standup\n"
 
     # Announce the order
-    msg.send "Standup order for #{date.toDateString()}: #{order.join(", ")}"
+    reply += "Standup order for #{date.toDateString()}: #{order.join(", ")}\n"
+    msg.send reply
 
     # Remember the deets
     robot.brain.data.standup.order = order
