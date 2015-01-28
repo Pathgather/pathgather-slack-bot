@@ -56,37 +56,22 @@ makeLunch = (database) ->
 module.exports = (robot) ->
 
   robot.respond /lunch at (.+)$/i, (msg) ->
+    console.log("Responding to message: '#{msg.message.text}'")
 
     Lunch = makeLunch(robot.brain.data)
     location = msg.match[1]
 
     if lunch = Lunch.findByLocation(location)
-      msg.send "last lunch at #{lunch.location} was #{lunch.date()}"
+      msg.send "OK, the last lunch at #{lunch.location} was #{lunch.date()}. Enjoy!"
     else
-      msg.send "have a great lunch!"
+      msg.send "Wow, a new location... I'm surprised. Enjoy!"
 
     # create or update the lunch record using the new name
     new Lunch(location).save()
 
 
-  robot.respond /lunch seed boomshakalaka$/i, (msg) ->
-
-    Lunch = makeLunch(robot.brain.data)
-    robot.brain.data.lunch_spots = {}
-
-    data = [
-      ["Chipotle", "January 1, 2015"],
-      ["Dorados", "January 14, 2015"],
-      ["Wendy's", "December 15, 2014"],
-      ["Joy", "January 7, 2015"],
-      ["Potbelly's", "January 6, 2015"]
-    ]
-
-    new Lunch(r[0], Date.parse(r[1])).save() for r in data
-
-    console.log robot.brain.data.lunch_spots
-
   robot.respond /lunch me$/i, (msg) ->
+    console.log("Responding to message: '#{msg.message.text}'")
 
     Lunch = makeLunch(robot.brain.data)
     beforeTimestamp = Date.now() - SEVEN_DAYS_IN_MS
@@ -95,6 +80,6 @@ module.exports = (robot) ->
 
     if candidates.length > 0
       pick = candidates[Math.floor(Math.random() * candidates.length)]
-      msg.send "go to #{pick}!"
+      msg.send "How about going to #{pick}?"
     else
-      msg.send "wherever you want, baby"
+      msg.send "Every location I know about, you've been recently. Why are you asking me? Go somewhere new for once..."
