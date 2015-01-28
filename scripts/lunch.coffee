@@ -63,7 +63,7 @@ module.exports = (robot) ->
     if lunch = Lunch.findByLocation(location)
       msg.send "last lunch at #{lunch.location} was #{lunch.date()}"
     else
-      msg.send "have a great lunch!"
+      msg.send "have a great lunch at #{location}!"
 
     # create or update the lunch record using the new name
     new Lunch(location).save()
