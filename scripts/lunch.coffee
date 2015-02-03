@@ -19,9 +19,8 @@ makeLunch = (database) ->
   database.lunch_spots ||= {}
 
   class Lunch
-    constructor: (location, at = Date.now()) ->
+    constructor: (location, @at = Date.now(), @count = 1) ->
       @location = location.trim()
-      @at = at
 
     # normalize the location so it can be used as a key in the db
     # i.e., Wendy's and wENDY would be the same
@@ -48,10 +47,10 @@ makeLunch = (database) ->
 
     @findByLocation: (location) ->
       if record = database.lunch_spots[ @toKey(location) ]
-        new Lunch(record.location, record.at)
+        new Lunch(record.location, record.at, record.count)
 
     @all: ->
-      new Lunch(r.location, r.at) for k,r of database.lunch_spots
+      new Lunch(r.location, r.at, r.count) for k,r of database.lunch_spots
 
 module.exports = (robot) ->
 
@@ -63,12 +62,11 @@ module.exports = (robot) ->
 
     if lunch = Lunch.findByLocation(location)
       msg.send "OK, the last lunch at #{lunch.location} was #{lunch.date()}. Enjoy!"
+      lunch.count++
+      lunch.save()
     else
       msg.send "Wow, a new location... I'm surprised. Enjoy!"
-
-    # create or update the lunch record using the new name
-    new Lunch(location).save()
-
+      new Lunch(location).save()
 
   robot.respond /lunch me$/i, (msg) ->
     console.log("Responding to message: '#{msg.message.text}'")
@@ -83,3 +81,16 @@ module.exports = (robot) ->
       msg.send "How about going to #{pick}?"
     else
       msg.send "Every location I know about, you've been recently. Why are you asking me? Go somewhere new for once..."
+
+  robot.respond /lunch locations$/i, (msg) ->
+    console.log("Responding to message: '#{msg.message.text}'")
+
+    Lunch = makeLunch(robot.brain.data)
+
+    lunches = Lunch.all()
+    if lunches.length > 0
+      reply = "Here's all your previous lunch spots:\n"
+      reply += "#{lunch.location} (#{lunch.count}, last visit #{lunch.date()})\n" for lunch in (lunches.sort (a,b) -> a.count < b.count)
+    else
+      reply = "I don't know any lunch locations yet. Use 'lunch at <location>' to teach me some!"
+    msg.send reply
