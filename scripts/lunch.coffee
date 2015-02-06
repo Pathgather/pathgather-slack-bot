@@ -62,6 +62,7 @@ module.exports = (robot) ->
 
     if lunch = Lunch.findByLocation(location)
       msg.send "OK, the last lunch at #{lunch.location} was #{lunch.date()}. Enjoy!"
+      lunch.at = Date.now()
       lunch.count++
       lunch.save()
     else
