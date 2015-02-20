@@ -13,6 +13,7 @@
 module.exports = (robot) ->
 
   robot.hear /(?:leftshark:|:rightshark:)/i, (msg) ->
+    console.log("Heard message: '#{msg.message.text}'")
     gifs = [
       "http://media.giphy.com/media/YiXWlmw7exlzW/giphy.gif",
       "http://media.giphy.com/media/11NVDFdtTMAqIM/giphy.gif",
@@ -20,6 +21,7 @@ module.exports = (robot) ->
       "http://media.giphy.com/media/KwwKS7nwKnJRe/giphy.gif"
     ]
     if Math.ceil((Math.random() * 10)) == 10
+      console.log("Shark attack!")
       setTimeout () ->
         msg.send msg.random gifs
       , 1000
