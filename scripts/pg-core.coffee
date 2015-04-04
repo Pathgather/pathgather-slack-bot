@@ -38,3 +38,9 @@ module.exports = (robot) ->
         return
       msg.send "Right now, the Pathgather light is #{if JSON.parse(body).status then 'on' else 'off'}"
 
+  setInterval () ->
+    console.log "Try talking in #pgbot-test..."
+    robot.send {room: 'pgbot-test'}, "Hello, I am a robot"
+    console.log "... sent a message"
+  , 5000
+
