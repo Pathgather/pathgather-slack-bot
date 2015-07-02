@@ -10,7 +10,7 @@
 # Commands:
 #   light on - turn the Pathgather light on
 #   light off - turn the Pathgather light off
-#   light status - get the current status of the Pathgather light
+#   light|door status - get the current status of the Pathgather light/door
 
 module.exports = (robot) ->
 
@@ -27,14 +27,19 @@ module.exports = (robot) ->
         return
       msg.send "OK, the Pathgather light is now #{if JSON.parse(body).status then 'on' else 'off'}!"
 
-  robot.respond /.*lights?\sstatus/i, (msg) ->
+  robot.respond /.*(light|door)\sstatus/i, (msg) ->
     console.log("Responding to message: '#{msg.message.text}'")
-    msg.http("http://pg-core.herokuapp.com/api/light").get() (err, res, body) ->
+    sensor = msg.match[1].toLowerCase()
+    return unless sensor == "light" || sensor == "door"
+    msg.http("http://pg-core.herokuapp.com/api/#{sensor}").get() (err, res, body) ->
       if err
         msg.send "Rut-roh, I got an error: #{err}"
         return
       if res.statusCode != 200
         msg.send "Rut-roh, I got an error: #{body.trim()}"
         return
-      msg.send "Right now, the Pathgather light is #{if JSON.parse(body).status then 'on' else 'off'}"
+      if sensor == "light"
+        msg.send "Right now, the Pathgather light is #{if JSON.parse(body).status then 'on' else 'off'}"
+      else if sensor == "door"
+        msg.send "Right now, the Pathgather door is #{if JSON.parse(body).closed then 'closed' else 'open'}"
 
