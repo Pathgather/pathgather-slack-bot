@@ -78,7 +78,7 @@ module.exports = (robot) ->
     interval = setInterval ->
       sendMessage(msg, user, shame)
       stopInterval(interval) if --num == 0
-    , 2000
+    , 3000
     intervals.push(interval)
 
   # Stop all the current praising/shaming
