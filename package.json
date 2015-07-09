@@ -24,7 +24,9 @@
     "hubot": ">= 2.6.0 < 3.0.0",
     "hubot-heroku-keepalive": "0.0.4",
     "hubot-scripts": ">= 2.5.0 < 3.0.0",
-    "hubot-slack": "^3.2.1"
+    "hubot-slack": "^3.2.1",
+    "moment": "^2.10.3",
+    "string-similarity": "^1.0.0"
   },
   "engines": {
     "node": ">= 0.8.x",
