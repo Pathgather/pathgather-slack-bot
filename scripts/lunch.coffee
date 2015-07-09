@@ -135,17 +135,3 @@ module.exports = (robot) ->
       msg.send "Done. Nobody will ever know about your visit to #{target.location}"
     else
       msg.send "There has never been such a location, dum dum."
-
-  robot.respond /lunch migrate ay karamba/i, (msg) ->
-
-    Lunch = makeLunch(robot.brain.data)
-    lunches = Lunch.all()
-
-    robot.brain.data.lunch_spots = {}
-
-    for lunch in lunches
-      if dup = Lunch.find(lunch.location)
-        dup.merge(lunch)
-        dup.save
-      else
-        lunch.save()
