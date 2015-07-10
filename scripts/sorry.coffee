@@ -37,7 +37,7 @@ module.exports = (robot) ->
   ]
 
   # Listen for apologies
-  robot.respond /(i.?m|i am) +sorry$/i, (msg) ->
+  robot.respond /(i.?m|i am) +sorry/i, (msg) ->
     console.log("Heard message: '#{msg.message.text}'")
     num = Math.floor(0.05 * Math.pow(Math.random() * 10, 2)) + 1
     msg.send "..."
