@@ -7,6 +7,7 @@
 module.exports = (robot) ->
   robot.respond /free (.+)/i, (msg) ->
     console.log("Responding to message: '#{msg.message.text}'")
+    user = msg.message.user.name
     words = msg.message.text.toLowerCase().split " "
     location = words[words.length - 1]
 
@@ -36,15 +37,18 @@ module.exports = (robot) ->
           "There's free #{food} upstairs! Go, go, go!",
           "There's free #{food} upstairs! Go, go, go!",
           "Free #{food} upstairs! PUSH AND SHOVE, PEOPLE!",
-          "Quick! Get your #{food} upstairs!",
+          "Extra, extra! There's #{food} upstairs! Eat all about it!",
           "Free #{food} upstairs! Use the stairs, why doncha.",
-          "BZZT. Instance of free [<#{food.toUpperCase()}>] detected. Location: [<UPSTAIRS>].",
+          "BZZT. Instance of free [<#{food.toUpperCase()}>] detected. Location: [<UPSTAIRS>]. ",
           "And I go back upstairs all the time. Turns out freedom ain't nothing but missing free food. Wishing I'd realized what I had when you were mine...",
           "If you had...one shot...one opportunity...to seize all the free #{food} you ever wanted upstairs...would you capture it, or just let it slip?",
         ]
       else
-        console.log("Invalid free food location!")
-        return
+        news = [
+          "Help make the world a better place...through a scalable enterprise-facing fault-tolerant distributed key-value store. Which knows where #{location} is, because I don't.",
+          "Just a small-town bot...living in a lonely world... I'm sorry, but I don't know where #{location} is.",
+          "I'm sorry, #{user}, I'm afraid I can't do that... *cough* I, uh, actually don't know where #{location} is."
+        ]
 
     # Announce this fabulous bounty of free sustenance
     # TODO: ability to ping everyone
