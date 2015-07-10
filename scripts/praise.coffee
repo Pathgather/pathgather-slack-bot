@@ -50,18 +50,19 @@ module.exports = (robot) ->
       intervals.splice(i, 1)
 
   # Send a praise/shame message and @-mention the given user
-  sendMessage = (msg, user, shame = false) ->
+  sendMessage = (msg, user, shame = false, reason = '') ->
     if shame
-      msg.send "#{user} SHAME! :bell:"
+      msg.send "#{user} SHAME! #{reason} :bell:"
     else
-      msg.send "#{user} #{msg.random praises}"
+      msg.send "#{user} #{msg.random praises} #{reason}"
 
   # Start praising/shaming the given user
-  robot.respond /(praise|shame) +(@\w+) *(\d+)?$/i, (msg) ->
+  robot.respond /(praise|shame) +(@\w+) *(\d+)? (.{1,144})?$/i, (msg) ->
     console.log("Heard message: '#{msg.message.text}'")
     shame = msg.match[1].match(/shame/i)?
     user = msg.match[2]
     num = msg.match[3] || 3
+    reason = msg.match[4] || ''
     if num > 10
       if shame
         msg.send "I can't shame that many times. It's just not right."
@@ -73,7 +74,7 @@ module.exports = (robot) ->
       return
 
     # Start praising/shaming
-    sendMessage(msg, user, shame)
+    sendMessage(msg, user, shame, reason)
     return if --num == 0
     interval = setInterval ->
       sendMessage(msg, user, shame)
