@@ -41,7 +41,7 @@ module.exports = (robot) ->
           "Free #{food} upstairs! PUSH AND SHOVE, PEOPLE!",
           "Extra, extra! There's #{food} upstairs! Eat all about it!",
           "Free #{food} upstairs! Use the stairs, why doncha.",
-          "BZZT. Instance of free [<#{food.toUpperCase()}>] detected. Location: [<UPSTAIRS>]. ",
+          "BZZT. Instance of free [<#{food.toUpperCase()}>] detected. Location: [<UPSTAIRS>]. Deliciousness: [<TREMENDOUS>].",
           "And I go back upstairs all the time. Turns out freedom ain't nothing but missing free food. Wishing I'd realized what I had when you were mine...",
           "If you had...one shot...one opportunity...to seize all the free #{food} you ever wanted upstairs...would you capture it, or just let it slip?",
         ]
