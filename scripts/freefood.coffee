@@ -25,7 +25,7 @@ module.exports = (robot) ->
           "Free #{food} in the kitchen!",
           "To the kitchen for free #{food}!",
           "To the kitchen for free #{food}!",
-          "THEY'RE COOKING UP SOME FREE #{food.toUpperCase()} in the kitchen! GO GO GO!"
+          "THEY'RE COOKING UP SOME FREE #{food.toUpperCase()} IN THE KITCHEN! GO GO GO!"
           "PATHGATHER-OPS SMELLS FREE #{food.toUpperCase()}!! PATHGATHER-OPS DEMANDS OFFERINGS OF SAID #{food.toUpperCase()}.",
           "Il y a de la nourriture gratuite dans la cuisine, ohonhonhon! C'est...how do you say... #{food}?",
           "Walk into the kitchen like whaddup I got some free #{food}!",
