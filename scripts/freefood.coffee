@@ -5,16 +5,18 @@
 #   <botname> free <food> <location>
 
 module.exports = (robot) ->
-  robot.respond /free (.+)/i, (msg) ->
+  # robot.respond /^.+ free (.+)/i, (msg) ->
+  robot.respond /free (.+)(kitchen|upstairs)/i, (msg) ->
     console.log("Responding to message: '#{msg.message.text}'")
     user = msg.message.user.name
-    words = msg.message.text.toLowerCase().split " "
-    location = words[words.length - 1]
+
+    words = msg.match[1].split " "
+    location = msg.match[2]
 
     filter = (list, func) -> word for word in list when func(word)
-    to_remove = [location, "at", "in", "the", "free", robot.name.toLowerCase()]
+    to_remove = ["at", "in", "the"]
     food = filter words, (word) -> to_remove.indexOf(word) < 0
-    food = food.join(' ')
+    food = food.join(" ").trim()
 
     switch location
       when "kitchen"
@@ -28,7 +30,7 @@ module.exports = (robot) ->
           "Il y a de la nourriture gratuite dans la cuisine, ohonhonhon! C'est...how do you say... #{food}?",
           "Walk into the kitchen like whaddup I got some free #{food}!",
           "Now available in the kitchen: #{food} for only 3 easy payments of $19.99. Just kidding, it's free!"
-          "What's cookin, good lookin? Actually nothing, our kitchen doesn't have a stove or oven. But there's free #{food} there right now!"
+          "What's cookin, good lookin? Actually, nothing. Our kitchen doesn't have a stove or oven. But there's free #{food} there right now!"
         ]
       when "upstairs"
         news = [
