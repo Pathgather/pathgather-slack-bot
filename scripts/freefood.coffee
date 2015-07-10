@@ -27,7 +27,7 @@ module.exports = (robot) ->
           "Il y a de la nourriture gratuite dans la cuisine, ohonhonhon!",
           "Walk into the kitchen like whaddup I got some free #{food}!",
           "Now available in the kitchen: #{food} for only 3 easy payments of $19.99. Just kidding, it's free!"
-
+          "What's cookin, good lookin? Actually nothing, our kitchen doesn't have a stove or oven. But there's free #{food} there right now!"
         ]
       when "upstairs"
         news = [
@@ -47,5 +47,6 @@ module.exports = (robot) ->
         return
 
     # Announce this fabulous bounty of free sustenance
+    # TODO: ability to ping everyone
     reply = msg.random news
     msg.send reply
