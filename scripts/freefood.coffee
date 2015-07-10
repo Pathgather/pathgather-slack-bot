@@ -1,6 +1,12 @@
 # Description:
 #   Announce free food.
 #
+# Dependencies:
+#   None
+#
+# Configuration:
+#   None
+#
 # Commands:
 #   <botname> free <food> <location>
 
@@ -18,6 +24,11 @@ module.exports = (robot) ->
     food = filter words, (word) -> to_remove.indexOf(word) < 0
     food = food.join(" ").trim()
 
+    if !food
+      msg.send "There's no food!!"
+      return
+
+    # Responses based on location
     switch location
       when "kitchen"
         news = [
