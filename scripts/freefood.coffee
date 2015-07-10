@@ -24,7 +24,7 @@ module.exports = (robot) ->
           "To the kitchen for free #{food}!",
           "THEY'RE COOKING UP SOME FREE #{food.toUpperCase()} in the kitchen! GO GO GO!"
           "PATHGATHER-OPS SMELLS FREE #{food.toUpperCase()}!! PATHGATHER-OPS DEMANDS OFFERINGS OF SAID #{food.toUpperCase()}.",
-          "Il y a de la nourriture gratuite dans la cuisine, ohonhonhon!",
+          "Il y a de la nourriture gratuite dans la cuisine, ohonhonhon! C'est...how do you say... #{food}?",
           "Walk into the kitchen like whaddup I got some free #{food}!",
           "Now available in the kitchen: #{food} for only 3 easy payments of $19.99. Just kidding, it's free!"
           "What's cookin, good lookin? Actually nothing, our kitchen doesn't have a stove or oven. But there's free #{food} there right now!"
