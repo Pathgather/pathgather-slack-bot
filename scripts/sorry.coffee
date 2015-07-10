@@ -33,6 +33,7 @@ module.exports = (robot) ->
     "Keep trying. :unamused:",
     "I'm still upset! :angry:",
     "Whatever :neutral_face:",
+    "Wow, rude *and* sarcastic. You're the whole package, aren't you?"
   ]
 
   # Listen for apologies
@@ -43,9 +44,9 @@ module.exports = (robot) ->
     interval = setInterval ->
       if --num == 0
         if (Math.floor(Math.random() * (10)) > 0)
-          msg.send msg.random accepts
+          msg.reply msg.random accepts
         else
-          msg.send msg.random rejects
+          msg.reply msg.random rejects
         clearInterval(interval)
       else
         msg.send "..."
