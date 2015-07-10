@@ -27,6 +27,7 @@ module.exports = (robot) ->
       msg.send "There's no food!!"
       return
 
+    # Responses based on location
     switch location
       when "kitchen"
         news = [
@@ -61,7 +62,7 @@ module.exports = (robot) ->
           "I'm sorry, #{user}, I'm afraid I can't do that... *cough* I, uh, actually don't know where #{location} is."
         ]
 
-    # Announce this fabulous bounty of free sustenance
+    # Announce this fabulous bounty of complimentary sustenance
     # TODO: ability to ping everyone
     reply = msg.random news
     msg.send reply
