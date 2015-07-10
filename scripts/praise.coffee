@@ -52,7 +52,7 @@ module.exports = (robot) ->
   # Send a praise/shame message and @-mention the given user
   sendMessage = (msg, user, shame = false, reason = '') ->
     if shame
-      msg.send "#{user} SHAME! #{reason} :bell:"
+      msg.send "#{user} SHAME! :bell: #{reason}"
     else
       msg.send "#{user} #{msg.random praises} #{reason}"
 
@@ -62,7 +62,8 @@ module.exports = (robot) ->
     shame = msg.match[1].match(/shame/i)?
     user = msg.match[2]
     num = msg.match[3] || 3
-    reason = msg.match[4] || ''
+    reason = if msg.match[4]? then '(' + msg.match[4].trim() + ')' else ''
+
     if num > 10
       if shame
         msg.send "I can't shame that many times. It's just not right."
@@ -77,7 +78,7 @@ module.exports = (robot) ->
     sendMessage(msg, user, shame, reason)
     return if --num == 0
     interval = setInterval ->
-      sendMessage(msg, user, shame)
+      sendMessage(msg, user, shame, reason)
       stopInterval(interval) if --num == 0
     , 3000
     intervals.push(interval)
