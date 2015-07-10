@@ -90,6 +90,7 @@ module.exports = (robot) ->
       "Andup-stay Ime-tay!",
       (() -> "Initiate STANDUP protocol (#{(Math.random() * 100000).toString(16)})... BEGIN"),
       (() -> ([1..(Math.floor(Math.random() * 10) + 1)].map (i) -> "STAND!").join(" ")),
+      "So we do our STAND UP, let's all come along, the butterflies fly awayyy!!",
     ]
     intro = msg.random intros
     intro = intro() if typeof intro == 'function'
