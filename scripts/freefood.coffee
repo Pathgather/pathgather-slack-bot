@@ -11,7 +11,6 @@
 #   <botname> free <food> <location>
 
 module.exports = (robot) ->
-  # robot.respond /^.+ free (.+)/i, (msg) ->
   robot.respond /free (.+)(kitchen|upstairs)/i, (msg) ->
     console.log("Responding to message: '#{msg.message.text}'")
     user = msg.message.user.name
@@ -28,7 +27,6 @@ module.exports = (robot) ->
       msg.send "There's no food!!"
       return
 
-    # Responses based on location
     switch location
       when "kitchen"
         news = [
@@ -39,7 +37,7 @@ module.exports = (robot) ->
           "THEY'RE COOKING UP SOME FREE #{food.toUpperCase()} IN THE KITCHEN! GO GO GO!"
           "PATHGATHER-OPS SMELLS FREE #{food.toUpperCase()}!! PATHGATHER-OPS DEMANDS OFFERINGS OF SAID #{food.toUpperCase()}.",
           "Il y a de la nourriture gratuite dans la cuisine, ohonhonhon! C'est...how do you say... #{food}?",
-          "Walk into the kitchen like whaddup I got some free #{food}!",
+          "Walk into the kitchen like, whaddup, I got some free #{food}!",
           "Now available in the kitchen: #{food} for only 3 easy payments of $19.99. Just kidding, it's free!"
           "What's cookin, good lookin? Actually, nothing. Our kitchen doesn't have a stove or oven. But there's free #{food} there right now!"
         ]
@@ -53,7 +51,7 @@ module.exports = (robot) ->
           "Extra, extra! There's #{food} upstairs! Eat all about it!",
           "Free #{food} upstairs! Use the stairs, why doncha.",
           "BZZT. Instance of free [<#{food.toUpperCase()}>] detected. Location: [<UPSTAIRS>]. Deliciousness: [<TREMENDOUS>].",
-          "And I go back upstairs all the time. Turns out freedom ain't nothing but missing free food. Wishing I'd realized what I had when you were mine...",
+          "And I go back to Dece-- I mean, upstairs, all the time. Turns out freedom ain't nothing but missing free food. Wishing I'd realized what I had when you were mine...",
           "If you had...one shot...one opportunity...to seize all the free #{food} you ever wanted upstairs...would you capture it, or just let it slip?",
         ]
       else
