@@ -94,12 +94,23 @@ module.exports = (robot) ->
 
   robot.respond /lunch locations$/i, (msg) ->
 
+    # sort by least latest visit then by least count
+    sort_lunch = (lunches) ->
+
+      least_latest_date = (a, b) -> new Date(a.at) > new Date(b.at)
+      least_count = (a, b) -> a.count > b.count
+
+      lunches.sort (a, b) ->
+        least_latest = least_latest_date(a, b)
+        least_count = least_count(a, b)
+        if least_latest is 0 then least_count else least_latest
+
     Lunch = makeLunch(robot.brain.data)
 
     lunches = Lunch.all()
     if lunches.length > 0
       reply = "Here's all your previous lunch spots:\n"
-      reply += "#{lunch.location} (#{lunch.count}, last visit #{lunch.date()})\n" for lunch in (lunches.sort (a,b) -> a.count < b.count)
+      reply += "#{lunch.location} (#{lunch.count}, last visit #{lunch.date()})\n" for lunch in sort_lunch(lunches)
     else
       reply = "I don't know any lunch locations yet. Use 'lunch at <location>' to teach me some!"
     msg.send reply
