@@ -97,11 +97,18 @@ module.exports = (robot) ->
     # sort by least latest visit then by least count
     sort_lunch = (lunches) ->
 
-      least_latest_date = (a, b) -> new Date(a.at) > new Date(b.at)
+      least_latest_visit = (a, b) ->
+        # reset time to only compare dates
+        date_a = new Date(a.at).setHours(0, 0, 0, 0).valueOf()
+        date_b = new Date(b.at).setHours(0, 0, 0, 0).valueOf()
+        if date_a.valueOf() > date_b.valueOf() then return 1
+        if date_a.valueOf() < date_b.valueOf() then return -1
+        0
+
       least_count = (a, b) -> a.count > b.count
 
       lunches.sort (a, b) ->
-        least_latest = least_latest_date(a, b)
+        least_latest = least_latest_visit(a, b)
         least_count = least_count(a, b)
         if least_latest is 0 then least_count else least_latest
 
