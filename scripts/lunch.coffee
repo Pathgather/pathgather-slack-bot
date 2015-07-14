@@ -48,6 +48,7 @@ makeLunch = (database) ->
       @count += other_lunch.count
 
     @findByLocation: (location) ->
+      if Object.keys(database.lunch_spots).length is 0 then return
 
       bestMatch = stringSimilarity.findBestMatch(location, Object.keys(database.lunch_spots)).bestMatch
 
