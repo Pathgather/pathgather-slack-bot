@@ -8,7 +8,7 @@
 #   None
 #
 # Commands:
-#   <botname> free <food> <location>
+#   Hubot free <food> <location>
 
 module.exports = (robot) ->
   robot.respond /free (.+)(kitchen|upstairs)/i, (msg) ->
