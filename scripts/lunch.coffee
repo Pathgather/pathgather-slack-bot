@@ -9,8 +9,8 @@
 #   None
 #
 # Commands:
-#   <botname> lunch at [location]
-#   <botname> lunch me
+#   Hubot lunch at [location]
+#   Hubot lunch me
 
 SEVEN_DAYS_IN_MS = 7 * 24 * 60 * 60 * 1000
 stringSimilarity = require('string-similarity')
