@@ -8,9 +8,9 @@
 #   None
 #
 # Commands:
-#   Hubot light on - turn the Pathgather light on
-#   Hubot light off - turn the Pathgather light off
-#   Hubot light|door status - get the current status of the Pathgather light/door
+#   Hubot light on - Turn the Pathgather light on
+#   Hubot light off - Turn the Pathgather light off
+#   Hubot light|door status - Get the current status of the Pathgather light/door
 
 module.exports = (robot) ->
 

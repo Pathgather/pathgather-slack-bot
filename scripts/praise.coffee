@@ -8,8 +8,8 @@
 #   None
 #
 # Commands:
-#   Hubot praise|shame @user <N> - praise / shame @user N times (default 3)
-#   Hubot praise|shame stop - stop the current praising / shaming
+#   Hubot praise|shame @user <N> - Praise / shame @user N times (default 3)
+#   Hubot praise|shame stop - Stop the current praising / shaming
 
 module.exports = (robot) ->
 

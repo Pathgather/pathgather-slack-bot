@@ -2,9 +2,9 @@
 #   Assign roles to people you're chatting with
 #
 # Commands:
-#   hubot <user> is a badass guitarist - assign a role to a user
-#   hubot <user> is not a badass guitarist - remove a role from a user
-#   hubot who is <user> - see what roles a user has
+#   hubot <user> is a badass guitarist - Assign a role to a user
+#   hubot <user> is not a badass guitarist - Remove a role from a user
+#   hubot who is <user> - See what roles a user has
 #
 # Examples:
 #   hubot holman is an ego surfer
