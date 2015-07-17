@@ -9,7 +9,6 @@
 #
 # Commands:
 #   it's happening - Hears people mention it's happening, and replies IT'S HAPPENING!
-#   <something> is happening - Hears people mention something is happening, and replies IT'S HAPPENING
 
 module.exports = (robot) ->
 

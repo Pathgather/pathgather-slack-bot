@@ -2,7 +2,7 @@
 #   Keep the ping pong scores. Somebody has to do it
 #
 # Commands:
-#   pingpong - hears a ping pong score, and remembers it (can also use pp)
+#   Hubot pingpong - hears a ping pong score, and remembers it (can also use pp)
 #   Hubot [<number>] pingpong matches [<number>] - responds with the last <number> matches (default: 5)
 #   Hubot delete pingpong match - deletes the last pingpong match record
 #   Hubot [<user>] pingpong record [<user>] - responds with W/L record for <user>
