@@ -47,7 +47,24 @@ makeLunch = (database) ->
       @at = if other_lunch.at < @at then @at else other_lunch.at
       @count += other_lunch.count
 
+    # sort by least latest visit then by least count
+    @sort_lunch: (lunches) ->
+
+      least_latest_visit = (a, b) ->
+        # reset time to only compare dates
+        date_a = new Date(a.at).setHours(0, 0, 0, 0).valueOf()
+        date_b = new Date(b.at).setHours(0, 0, 0, 0).valueOf()
+        date_a - date_b
+
+      least_count = (a, b) -> a.count > b.count
+
+      lunches.sort (a, b) ->
+        least_latest = least_latest_visit(a, b)
+        least_count = least_count(a, b)
+        if least_latest is 0 then least_count else least_latest
+
     @findByLocation: (location) ->
+      if Object.keys(database.lunch_spots).length is 0 then return
 
       bestMatch = stringSimilarity.findBestMatch(location, Object.keys(database.lunch_spots)).bestMatch
 
@@ -98,7 +115,7 @@ module.exports = (robot) ->
     lunches = Lunch.all()
     if lunches.length > 0
       reply = "Here's all your previous lunch spots:\n"
-      reply += "#{lunch.location} (#{lunch.count}, last visit #{lunch.date()})\n" for lunch in (lunches.sort (a,b) -> a.count < b.count)
+      reply += "#{lunch.location} (#{lunch.count}, last visit #{lunch.date()})\n" for lunch in Lunch.sort_lunch(lunches)
     else
       reply = "I don't know any lunch locations yet. Use 'lunch at <location>' to teach me some!"
     msg.send reply
