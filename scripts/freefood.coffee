@@ -8,7 +8,7 @@
 #   None
 #
 # Commands:
-#   <botname> free <food> <location>
+#   Hubot free <food> <location> - Replies with comment about free food.
 
 module.exports = (robot) ->
   robot.respond /free (.+)(kitchen|upstairs)/i, (msg) ->
@@ -35,12 +35,12 @@ module.exports = (robot) ->
           "Free #{food} in the kitchen!",
           "To the kitchen for free #{food}!",
           "To the kitchen for free #{food}!",
-          "THEY'RE COOKING UP SOME FREE #{food.toUpperCase()} IN THE KITCHEN! GO GO GO!"
-          "PATHGATHER-OPS SMELLS FREE #{food.toUpperCase()}!! PATHGATHER-OPS DEMANDS OFFERINGS OF SAID #{food.toUpperCase()}.",
-          "Il y a de la nourriture gratuite dans la cuisine, ohonhonhon! C'est...how do you say... #{food}?",
-          "Walk into the kitchen like, whaddup, I got some free #{food}!",
-          "Now available in the kitchen: #{food} for only 3 easy payments of $19.99. Just kidding, it's free!"
-          "What's cookin, good lookin? Actually, nothing. Our kitchen doesn't have a stove or oven. But there's free #{food} there right now!"
+          "THEY'RE COOKIN' UP SOME FREE #{food.toUpperCase()} IN THE KITCHEN! GO GO GO!"
+          "PATHGATHER-OPS SMELLS FREE #{food.toUpperCase()} UPSTAIRS!! PATHGATHER-OPS DEMANDS OFFERINGS OF SAID #{food.toUpperCase()}.",
+          "Il y a de la nourriture gratuite dans la cuisine, honhonhon! C'est...how do you say... #{food}?",
+          "Walk into the kitchen like, WHATUP, I got some free #{food}!",
+          "Now available in the kitchen: #{food} for only 3 easy payments of $19.99. ...Just kidding, it's free!"
+          "What's cookin', good lookin'? ...Actually, nothing. Our kitchen doesn't have a stove or oven. But there's free #{food} there right now!"
         ]
       when "upstairs"
         news = [
@@ -50,9 +50,9 @@ module.exports = (robot) ->
           "There's free #{food} upstairs! Go, go, go!",
           "Free #{food} upstairs! PUSH AND SHOVE, PEOPLE!",
           "Extra, extra! There's #{food} upstairs! Eat all about it!",
-          "Free #{food} upstairs! Use the stairs, why doncha.",
+          "Free #{food} upstairs! It's there for the taking!",
           "BZZT. Instance of free [<#{food.toUpperCase()}>] detected. Location: [<UPSTAIRS>]. Deliciousness: [<TREMENDOUS>].",
-          "And I go back to Dece-- I mean, upstairs, all the time. Turns out freedom ain't nothing but missing free food. Wishing I'd realized what I had when you were mine...",
+          "And I go back to Decemb-- I mean, upstairs, all the time. Turns out freedom ain't nothing but missing free food. Wishing I'd realized what I had when you were mine...",
           "If you had...one shot...one opportunity...to seize all the free #{food} you ever wanted upstairs...would you capture it, or just let it slip?",
         ]
       else

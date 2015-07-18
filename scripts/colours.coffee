@@ -2,7 +2,7 @@
 #   Get the Pathgather colours
 #
 # Commands:
-#   Hubot colours - responds with the hex, rgba, and hsla values for Pathgather orange & blue
+#   Hubot colours - Responds with the hex, rgba, and hsla values for Pathgather orange & blue
 
 module.exports = (robot) ->
   robot.respond /colou?rs?$/i, (msg) ->
