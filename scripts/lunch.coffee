@@ -69,7 +69,7 @@ makeLunch = (database) ->
       bestMatch = stringSimilarity.findBestMatch(location, Object.keys(database.lunch_spots)).bestMatch
 
       # minimum requirement for similarity
-      if bestMatch.rating > 0.15
+      if bestMatch.rating > 0.35
         @find(bestMatch.target)
 
     @find: (key) ->
