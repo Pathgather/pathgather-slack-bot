@@ -56,12 +56,13 @@ makeLunch = (database) ->
         date_b = new Date(b.at).setHours(0, 0, 0, 0).valueOf()
         date_a - date_b
 
-      least_count = (a, b) -> a.count > b.count
+      least_count_compare = (a, b) -> a.count > b.count
 
       lunches.sort (a, b) ->
         least_latest = least_latest_visit(a, b)
-        least_count = least_count(a, b)
-        if least_latest is 0 then least_count else least_latest
+        if !(least_latest is 0) then return least_latest
+
+        least_count_compare(a, b)
 
     @findByLocation: (location) ->
       if Object.keys(database.lunch_spots).length is 0 then return
