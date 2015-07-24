@@ -9,8 +9,8 @@
 #   None
 #
 # Commands:
-#   <botname> lunch at [location]
-#   <botname> lunch me
+#   Hubot lunch at [location]
+#   Hubot lunch me
 
 SEVEN_DAYS_IN_MS = 7 * 24 * 60 * 60 * 1000
 stringSimilarity = require('string-similarity')
@@ -70,7 +70,7 @@ makeLunch = (database) ->
       bestMatch = stringSimilarity.findBestMatch(location, Object.keys(database.lunch_spots)).bestMatch
 
       # minimum requirement for similarity
-      if bestMatch.rating > 0.15
+      if bestMatch.rating > 0.35
         @find(bestMatch.target)
 
     @find: (key) ->

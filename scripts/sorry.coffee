@@ -8,7 +8,7 @@
 #   None
 #
 # Commands:
-#   Hubot I'm sorry
+#   Hubot I'm sorry - Replies with acceptance or rejection of apology.
 
 module.exports = (robot) ->
 

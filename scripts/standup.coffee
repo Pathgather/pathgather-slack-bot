@@ -2,9 +2,9 @@
 #   Bring order to the chaos that are daily standups.
 #
 # Commands:
-#   Hubot standup users - responds with the users that we know about
-#   Hubot standup link <new> - responds with the current standup link, or remembers a new one if provided
-#   Hubot standup me - responds with a Hangout link and the order of speakers
+#   Hubot standup users - Responds with the users that we know about
+#   Hubot standup link <new> - Responds with the current standup link, or remembers a new one if provided
+#   Hubot standup me - Responds with a Hangout link and the order of speakers
 
 getStandupUsers = (robot) ->
   # TODO: limit to only users in the current room
