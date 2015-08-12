@@ -69,6 +69,10 @@ module.exports = (robot) ->
       robot.messageRoom("#general", "Congrats! The button has been pressed #{total} time#{if total > 1 then 's' else ''}!#{Array(total + 1).join(' :pg:')}")
     , 60000
 
+  # Listen for when the tower comes online
+  robot.on "pg-tower-on", (data) ->
+    robot.messageRoom "#pgbot-test", "The :pg: tower is back online!"
+
   robot.respond /button stats/i, (msg) ->
     console.log("Responding to message: '#{msg.message.text}'")
     total = robot.brain.data.button.total

@@ -60,5 +60,3 @@ module.exports = (robot) ->
         msg.send "Right now, the Pathgather light is #{if JSON.parse(body).status then 'on' else 'off'}"
       else if sensor == "door"
         msg.send "Right now, the Pathgather door is #{if JSON.parse(body).closed then 'closed' else 'open'}"
-
-  robot.messageRoom "#pgbot-test", "Testing testing - is this thing on?"
