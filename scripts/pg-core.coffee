@@ -28,6 +28,7 @@ module.exports = (robot) ->
   # Listen for events from the Spark API
   if (collection != null)
     collection.on 'event', (eventInfo) ->
+      console.log "Received event from Spark API: ", eventInfo
       return unless eventInfo.event?
       # Emit the event via the Hubot API, for easy subscribing elsewhere
       robot.emit eventInfo.event, eventInfo.data
