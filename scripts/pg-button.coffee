@@ -53,6 +53,12 @@ module.exports = (robot) ->
     "http://media.giphy.com/media/Vm6YGB3Ng8lnW/giphy.gif",
     "http://media.giphy.com/media/DOHNfmZ0yT3OM/giphy.gif",
     "http://media3.giphy.com/media/v8f1MQNAofSKY/giphy.gif",
+    # strictly top gun from here on down
+    "http://media.giphy.com/media/KAfAT700n1DXO/giphy.gif",
+    "http://media1.giphy.com/media/tzDutJyEkY0Yo/giphy.gif",
+    "http://media.giphy.com/media/iByd2dFdFwKn6/giphy.gif",
+    "http://media0.giphy.com/media/IgLMZ7YFdkXXW/giphy.gif",
+    "http://media.giphy.com/media/hb8QnDZ3DRUB2/giphy.gif",
   ]
 
   # Listen for button press events emitted by pg-core.coffee
