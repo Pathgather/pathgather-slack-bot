@@ -14,6 +14,7 @@ getStandupUsers = (robot) ->
     console.log "Found slack client!"
     client_users = robot.adapter.client.users
     for own key, user of client_users
+      console.log "Found user: ", user
       if !user.is_bot && !user.deleted && user.name? && user.profile.email?
         console.log "Found real user: #{user.name}"
         users.push(user)
