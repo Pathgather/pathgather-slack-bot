@@ -82,6 +82,12 @@ makeLunch = (database) ->
 
 module.exports = (robot) ->
 
+  robot.router.get '/lunches', (req, res) ->
+    console.log "GET lunch spots"
+    Lunch = makeLunch(robot.brain.data)
+    res.setHeader('Content-Type', 'application/json')
+    res.send JSON.stringify(Lunch.all())
+
   robot.respond /lunch at (.+)$/i, (msg) ->
 
     Lunch = makeLunch(robot.brain.data)
