@@ -20,7 +20,7 @@ module.exports = (robot) ->
       "http://media.giphy.com/media/jsROB8A2xxoVa/giphy.gif",
       "http://media.giphy.com/media/KwwKS7nwKnJRe/giphy.gif"
     ]
-    if Math.ceil((Math.random() * 10)) == 10
+    if Math.ceil((Math.random() * 5)) == 5
       console.log("Shark attack!")
       setTimeout () ->
         msg.send msg.random gifs
