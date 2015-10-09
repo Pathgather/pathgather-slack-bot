@@ -29,6 +29,14 @@ getStandupUsers = (robot) ->
   console.log "Found #{users.length} standup users"
   users
 
+getUserName = (name) ->
+  console.log "get user name: #{name}"
+  # If the user has an emoji, randomly replace their standup name with it every now and then
+  if name in ["jamie", "eric", "john", "mansi", "guntars"] && (Math.random() > 0.7)
+    ":#{name}:"
+  else
+    name
+
 # From https://gist.github.com/ddgromit/859699
 shuffleArray = (arr) ->
   i = arr.length;
@@ -129,7 +137,7 @@ module.exports = (robot) ->
       reply += "Added #{new_users.join(", ")} to the standup\n"
 
     # Announce the order
-    reply += "Standup order for #{date.toDateString()}: #{order.join(", ")}\n"
+    reply += "Standup order for #{date.toDateString()}: #{(getUserName(name) for name in order).join(", ")}\n"
     msg.send reply
 
     # Remember the deets
