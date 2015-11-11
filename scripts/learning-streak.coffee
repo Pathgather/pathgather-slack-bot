@@ -107,7 +107,7 @@ computeDailyStreak = (dates) ->
   currentStreakDate = new Date()
 
   # Optionally match the current date
-  ++streak if dates[dates.length - 1] == currentStreakDate.toString()
+  ++streak if dates[dates.length - 1] == currentStreakDate.toDateString()
 
   # Match the current streak starting from yesterday
   currentStreakDate.setDate(currentStreakDate.getDate() - 1)
