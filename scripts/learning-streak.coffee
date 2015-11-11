@@ -154,7 +154,7 @@ module.exports = (robot) ->
 
       # Coerce our two objects into a sorted array of rows
       streakLeaderboard = []
-      streakLeaderboard.push([name, dailyStreakData[name], weeklyStreakData[name]]) for own name of dailyStreakData
+      streakLeaderboard.push([name, weeklyStreakData[name], dailyStreakData[name]]) for own name of dailyStreakData
       streakLeaderboard.sort (a, b) -> b[1] - a[1] || b[2] - a[2]
 
       # Format things nicely, because why not
@@ -162,11 +162,11 @@ module.exports = (robot) ->
       numSpaces = maxNameLength - 4 + 1
       message = "Here are the current learning streaks for everyone in team.pathgather.com:\n"
       message += "```\n"
-      message += "Name#{new Array(numSpaces).join(" ")} | Daily Streak | Weekly Streak\n"
+      message += "Name#{new Array(numSpaces).join(" ")} | Weekly Streak | Daily Streak\n"
       streakLeaderboard.forEach (row) ->
         numNameSpaces = maxNameLength - row[0].length + 1
-        numDailySpaces = "Daily Streak".length - row[1].toString().length + 1
-        message += "#{row[0]}#{new Array(numNameSpaces).join(" ")} | #{row[1]}#{new Array(numDailySpaces).join(" ")} | #{row[2]}\n"
+        numWeeklySpaces = "Weekly Streak".length - row[1].toString().length + 1
+        message += "#{row[0]}#{new Array(numNameSpaces).join(" ")} | #{row[1]}#{new Array(numWeeklySpaces).join(" ")} | #{row[2]}\n"
       message += "```"
       msg.send message
       msg.send "Keep learning, everyone! :pg:"
