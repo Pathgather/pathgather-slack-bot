@@ -12,7 +12,7 @@
 
 PATHGATHER_API_KEY = process.env.PATHGATHER_API_KEY
 
-processUserContent = (msg, callback, memo = {}, from) ->
+processUserContent = (msg, memo, callback, from) ->
   client = msg.http("https://api.pathgather.com/v1/user_content")
   if from?
     client = client.query({ from: from })
@@ -45,7 +45,44 @@ processUserContent = (msg, callback, memo = {}, from) ->
 
     # Be cool and recursive and stuf
     if data.next?
-      processUserContent(msg, callback, memo, data.next)
+      processUserContent(msg, memo, callback, data.next)
+    else
+      callback(memo)
+
+processUserPaths = (msg, memo, callback, from) ->
+  client = msg.http("https://api.pathgather.com/v1/user_paths")
+  if from?
+    client = client.query({ from: from })
+  client.header("Authorization", "Bearer #{PATHGATHER_API_KEY}")
+      .header("Paths-Type", "application/json")
+      .get() (err, res, body) ->
+    if err
+      msg.send "Rut-roh, I got an error: #{err}"
+      msg.send "Is PATHGATHER_API_KEY set correctly?"
+      return
+    if res.statusCode != 200
+      msg.send "Rut-roh, I got a bad status code (#{res.statusCode})"
+      msg.send "Is PATHGATHER_API_KEY set correctly?"
+      return
+    try
+      data = JSON.parse(body)
+    catch e
+      msg.send "Rut roh, I couldn't parse the body as JSON: #{e}"
+      msg.send "Is PATHGATHER_API_KEY set correctly?"
+      return
+
+    # Reduce results to hash of unique days, keyed by user
+    data.results.forEach (userPaths) ->
+      if !userPaths.user.deactivated
+        name = "#{userPaths.user.first_name} #{userPaths.user.last_name}"
+        memo[name] ||= []
+        ["started_at"].forEach (key) ->
+          if userPaths[key]?
+            memo[name].push(new Date(userPaths[key]).toDateString())
+
+    # Be cool and recursive and stuf
+    if data.next?
+      processUserPaths(msg, memo, callback, data.next)
     else
       callback(memo)
 
@@ -110,7 +147,7 @@ module.exports = (robot) ->
       msg.send "Sorry, I can't do that - please set PATHGATHER_API_KEY as an environment variable first!"
       return
     msg.send "OK, I'm fetching the learning streak data now via the PG API..."
-    processUserContent msg, (data) ->
+    processUserContent msg, {}, (data) -> processUserPaths msg, data, (data) ->
       userContentData = reduceObj(data, (name, dates) -> makeUnique(dates).sort(dateSort))
       dailyStreakData = reduceObj(userContentData, (name, dates) -> computeDailyStreak(dates))
       weeklyStreakData = reduceObj(userContentData, (name, dates) -> computeWeeklyStreak(dates))
