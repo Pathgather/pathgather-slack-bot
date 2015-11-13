@@ -104,10 +104,13 @@ dateSort = (a, b) ->
 
 computeDailyStreak = (dates) ->
   streak = 0
+  extended = false
   currentStreakDate = new Date()
 
   # Optionally match the current date
-  ++streak if dates[dates.length - 1] == currentStreakDate.toDateString()
+  if dates[dates.length - 1] == currentStreakDate.toDateString()
+    ++streak
+    extended = true
 
   # Match the current streak starting from yesterday
   currentStreakDate.setDate(currentStreakDate.getDate() - 1)
@@ -116,7 +119,7 @@ computeDailyStreak = (dates) ->
       ++streak
       currentStreakDate.setDate(currentStreakDate.getDate() - 1)
   dates.reverse()
-  return streak
+  return { streak: streak, extended: extended}
 
 computeWeeklyStreak = (dates) ->
   weeks = makeUnique(dates.map (day) ->
@@ -125,11 +128,14 @@ computeWeeklyStreak = (dates) ->
     d.toDateString()
   )
   streak = 0
+  extended = false
   currentStreakWeek = new Date()
   currentStreakWeek.setDate(currentStreakWeek.getDate() - currentStreakWeek.getDay())
 
   # Optionally match the current week
-  ++streak if weeks[weeks.length - 1] == currentStreakWeek.toDateString()
+  if weeks[weeks.length - 1] == currentStreakWeek.toDateString()
+    ++streak
+    extended = true
 
   # Match the current streak starting from the previous week
   currentStreakWeek.setDate(currentStreakWeek.getDate() - 7)
@@ -137,7 +143,7 @@ computeWeeklyStreak = (dates) ->
     if week == currentStreakWeek.toDateString()
       ++streak
       currentStreakWeek.setDate(currentStreakWeek.getDate() - 7)
-  return streak
+  return { streak: streak, extended: extended}
 
 module.exports = (robot) ->
 
@@ -154,8 +160,8 @@ module.exports = (robot) ->
 
       # Coerce our two objects into a sorted array of rows
       streakLeaderboard = []
-      streakLeaderboard.push([name, weeklyStreakData[name], dailyStreakData[name]]) for own name of dailyStreakData
-      streakLeaderboard.sort (a, b) -> b[1] - a[1] || b[2] - a[2]
+      streakLeaderboard.push({name: name, weekly: weeklyStreakData[name], daily: dailyStreakData[name]}) for own name of dailyStreakData
+      streakLeaderboard.sort (a, b) -> b.weekly.streak - a.weekly.streak || b.daily.streak - a.daily.streak
 
       # Format things nicely, because why not
       maxNameLength = Object.keys(dailyStreakData).sort((a, b) -> b.length - a.length)[0].length
@@ -164,9 +170,11 @@ module.exports = (robot) ->
       message += "```\n"
       message += "Name#{new Array(numSpaces).join(" ")} | Weekly Streak | Daily Streak\n"
       streakLeaderboard.forEach (row) ->
-        numNameSpaces = maxNameLength - row[0].length + 1
-        numWeeklySpaces = "Weekly Streak".length - row[1].toString().length + 1
-        message += "#{row[0]}#{new Array(numNameSpaces).join(" ")} | #{row[1]}#{new Array(numWeeklySpaces).join(" ")} | #{row[2]}\n"
+        numNameSpaces = maxNameLength - row.name.length + 1
+        numWeeklySpaces = "Weekly Streak".length - (row.weekly.streak.toString().length + row.weekly.extended) + 1
+        message += "#{row.name}#{new Array(numNameSpaces).join(" ")} | "
+        message += "#{row.weekly.streak}#{if row.weekly.extended then "*" else ""}#{new Array(numWeeklySpaces).join(" ")} | "
+        message += "#{row.daily.streak}#{if row.daily.extended then "*" else ""}\n"
       message += "```"
       msg.send message
       msg.send "Keep learning, everyone! :pg:"
