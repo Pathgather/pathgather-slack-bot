@@ -148,7 +148,7 @@ computeWeeklyStreak = (dates) ->
 getNameForUser = (user) ->
   slackToPathgatherNames =
     "neville": "Neville Samuell"
-    "brian": "Brian Josephs"
+    "bj": "Brian Josephs"
     "erik": "Erik Michaelson"
     "guntars": "Guntars Ašmanis"
     "chris": "Chris Hanks"
@@ -156,7 +156,6 @@ getNameForUser = (user) ->
     "john": "John Ohrenberger"
     "jamie": "Jamie Davidson"
     "mansi": "Mansi Shah"
-    "Shell": "Neville Samuell"
   return slackToPathgatherNames[user]
 
 module.exports = (robot) ->
