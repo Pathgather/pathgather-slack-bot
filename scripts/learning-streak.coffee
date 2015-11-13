@@ -203,4 +203,7 @@ module.exports = (robot) ->
         message += "#{row.daily.streak}#{if row.daily.extended then "*" else ""}\n"
       message += "```"
       msg.send message
-      msg.send "Keep learning, everyone! :pg:"
+      if userName?
+        msg.reply "Keep learning! :pg:"
+      else
+        msg.send "Keep learning, everyone! :pg:"
