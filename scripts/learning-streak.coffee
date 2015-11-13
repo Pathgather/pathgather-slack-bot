@@ -145,16 +145,42 @@ computeWeeklyStreak = (dates) ->
       currentStreakWeek.setDate(currentStreakWeek.getDate() - 7)
   return { streak: streak, extended: extended}
 
+getNameForUser = (user) ->
+  slackToPathgatherNames =
+    "neville": "Neville Samuell"
+    "brian": "Brian Josephs"
+    "erik": "Erik Michaelson"
+    "guntars": "Guntars Ašmanis"
+    "chris": "Chris Hanks"
+    "eric": "Eric Duffy"
+    "john": "John Ohrenberger"
+    "jamie": "Jamie Davidson"
+    "mansi": "Mansi Shah"
+    "Shell": "Neville Samuell"
+  return slackToPathgatherNames[user]
+
 module.exports = (robot) ->
 
-  robot.respond /.*learn(ing) streak/i, (msg) ->
+  robot.respond /.*?(my)?\s*learn(ing)? streaks?\s*(me)?/i, (msg) ->
     console.log("Responding to message: '#{msg.message.text}'")
     if !PATHGATHER_API_KEY?
       msg.send "Sorry, I can't do that - please set PATHGATHER_API_KEY as an environment variable first!"
       return
-    msg.send "OK, I'm fetching the learning streak data now via the PG API..."
+    if (msg.match[1]? || msg.match[3]?) && msg.envelope?.user?.name?
+      userName = getNameForUser(msg.envelope.user.name)
+      if !userName?
+        msg.send "Sorry, I don't know the Pathgather user for you (#{msg.envelope.user.name})! Tell @neville to update my logic"
+        return
+    msg.send "OK, I'm fetching the learning streak data #{if userName? then "for #{userName} " else ""}now via the PG API..."
     processUserContent msg, {}, (data) -> processUserPaths msg, data, (data) ->
       userContentData = reduceObj(data, (name, dates) -> makeUnique(dates).sort(dateSort))
+      if userName?
+        if !userContentData[userName]?
+          msg.send "Sorry, I couldn't find any data for #{userName}..."
+          return
+        tmp = {}
+        tmp[userName] = userContentData[userName]
+        userContentData = tmp
       dailyStreakData = reduceObj(userContentData, (name, dates) -> computeDailyStreak(dates))
       weeklyStreakData = reduceObj(userContentData, (name, dates) -> computeWeeklyStreak(dates))
 
@@ -166,7 +192,7 @@ module.exports = (robot) ->
       # Format things nicely, because why not
       maxNameLength = Object.keys(dailyStreakData).sort((a, b) -> b.length - a.length)[0].length
       numSpaces = maxNameLength - 4 + 1
-      message = "Here are the current learning streaks for everyone in team.pathgather.com:\n"
+      message = "Here are the current learning streaks for #{if userName? then userName else "everyone"} in team.pathgather.com:\n"
       message += "```\n"
       message += "Name#{new Array(numSpaces).join(" ")} | Weekly Streak | Daily Streak\n"
       streakLeaderboard.forEach (row) ->
