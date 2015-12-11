@@ -57,7 +57,7 @@ module.exports = (robot) ->
       msg.send "#{user} #{msg.random praises} #{reason}"
 
   # Start praising/shaming the given user
-  robot.respond /(praise|shame) +(@\w+) *(\d+)? (.{1,144})?$/i, (msg) ->
+  robot.respond /(praise|shame) +(@\w+) *(\d+)? *(.{1,144})?$/i, (msg) ->
     console.log("Heard message: '#{msg.message.text}'")
     shame = msg.match[1].match(/shame/i)?
     user = msg.match[2]
