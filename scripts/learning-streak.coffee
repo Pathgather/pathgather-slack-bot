@@ -11,6 +11,7 @@
 #   Hubot learning streaks - Print some stats about learning streaks
 
 PATHGATHER_API_KEY = process.env.PATHGATHER_API_KEY
+START_DATE = new Date("2016-01-03 EST")
 
 processUserContent = (msg, memo, callback, from) ->
   client = msg.http("https://api.pathgather.com/v1/user_content")
@@ -115,6 +116,8 @@ computeDailyStreak = (dates) ->
   # Match the current streak starting from yesterday
   currentStreakDate.setDate(currentStreakDate.getDate() - 1)
   dates.reverse().forEach (date) ->
+    if (currentStreakDate < START_DATE)
+      return
     if date == currentStreakDate.toDateString()
       ++streak
       currentStreakDate.setDate(currentStreakDate.getDate() - 1)
@@ -140,6 +143,8 @@ computeWeeklyStreak = (dates) ->
   # Match the current streak starting from the previous week
   currentStreakWeek.setDate(currentStreakWeek.getDate() - 7)
   weeks.reverse().forEach (week) ->
+    if (currentStreakWeek < START_DATE)
+      return
     if week == currentStreakWeek.toDateString()
       ++streak
       currentStreakWeek.setDate(currentStreakWeek.getDate() - 7)
@@ -191,9 +196,10 @@ module.exports = (robot) ->
       # Format things nicely, because why not
       maxNameLength = Object.keys(dailyStreakData).sort((a, b) -> b.length - a.length)[0].length
       numSpaces = maxNameLength - 4 + 1
-      message = "Here are the current learning streaks for #{if userName? then userName else "everyone"} in team.pathgather.com:\n"
-      message += "```\n"
-      message += "Name#{new Array(numSpaces).join(" ")} | Weekly Streak | Daily Streak\n"
+      message = "Here are the current learning streaks for #{if userName? then userName else "everyone"} in " +
+        "team.pathgather.com (starting #{START_DATE.toDateString()}):\n" +
+        "```\n" +
+        "Name#{new Array(numSpaces).join(" ")} | Weekly Streak | Daily Streak\n"
       streakLeaderboard.forEach (row) ->
         numNameSpaces = maxNameLength - row.name.length + 1
         numWeeklySpaces = "Weekly Streak".length - (row.weekly.streak.toString().length + row.weekly.extended) + 1
