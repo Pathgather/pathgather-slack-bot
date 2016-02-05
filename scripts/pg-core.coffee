@@ -104,6 +104,7 @@ module.exports = (robot) ->
             msg.send "Rut-roh, I got an error: #{body.trim()}"
             return
           msg.send "OK, the Pathgather light is now set to #{msg.match[1]}!"
+      return
 
     # Matching colours
     colour = if (msg.match[1].toLowerCase() == "blue")
