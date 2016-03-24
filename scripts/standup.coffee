@@ -32,7 +32,7 @@ getStandupUsers = (robot) ->
 getUserName = (name) ->
   console.log "get user name: #{name}"
   # If the user has an emoji, randomly replace their standup name with it every now and then
-  if name in ["jamie", "eric", "john", "mansi", "guntars"] && (Math.random() > 0.7)
+  if name in ["jamie", "eric", "john", "mansi", "guntars", "chris"] && (Math.random() > 0.7)
     ":#{name}:"
   else
     name
