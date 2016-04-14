@@ -15,6 +15,7 @@
 
 sparknode = require('sparknode')
 SPARK_ACCESS_TOKEN = process.env.SPARK_ACCESS_TOKEN
+SPARK_TOWER_CORE_ID = process.env.SPARK_TOWER_CORE_ID
 LIFX_ACCESS_TOKEN = process.env.LIFX_ACCESS_TOKEN
 PG_ORANGE = "hue:18 saturation:0.91 brightness:0.4"
 PG_BLUE = "hue:213 saturation:0.79 brightness:0.61"
@@ -168,6 +169,40 @@ module.exports = (robot) ->
         status = getLifxStatus(JSON.parse(body))
         msg.send "Right now, the Pathgather light is #{status}"
 
+  robot.respond /play song\s+(.*)/i, (msg) ->
+    console.log("Responding to message: '#{msg.message.text}'")
+    core = new sparknode.Core({
+      accessToken: SPARK_ACCESS_TOKEN
+      id: SPARK_TOWER_CORE_ID
+    })
+
+    song = msg.match[1]
+    if (song != "1" && song != "2" && song != "3") {
+      msg.send "I can't play that song, sorry! (use songs 1, 2, or 3)"
+      return
+    }
+
+    # Wait to connect
+    msg.send "Connecting to the tower..."
+    core.on "connect", ->
+      msg.send "OK, playing song! :musical_note:"
+      console.log("Connected to pg-tower core: '#{SPARK_TOWER_CORE_ID}'")
+      core.playSong song, (err, data) ->
+        console.log("got response from Spark:", err, data)
+
+  robot.respond /stop song.*/i, (msg) ->
+    console.log("Responding to message: '#{msg.message.text}'")
+    core = new sparknode.Core({
+      accessToken: SPARK_ACCESS_TOKEN
+      id: SPARK_TOWER_CORE_ID
+    })
+
+    # Wait to connect
+    core.on "connect", ->
+      console.log("Connected to pg-tower core: '#{SPARK_TOWER_CORE_ID}'")
+      core.playSong "-1", (err, data) ->
+        console.log("got response from Spark:", err, data)
+
   robot.on "pg-tower-button-pressed", (data) ->
     # IT'S THE FINAL COUNTDOOOOOWN
     powerOff = {
@@ -230,3 +265,4 @@ module.exports = (robot) ->
         .header("Content-Type", "application/json")
         .put(JSON.stringify(fadeOut))
     , 48000
+
