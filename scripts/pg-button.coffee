@@ -53,6 +53,14 @@ module.exports = (robot) ->
     "http://media.giphy.com/media/Vm6YGB3Ng8lnW/giphy.gif",
     "http://media.giphy.com/media/DOHNfmZ0yT3OM/giphy.gif",
     "http://media3.giphy.com/media/v8f1MQNAofSKY/giphy.gif",
+    # need some bears in here
+    "http://i.giphy.com/InketCaEF5OOQ.gif",
+    "http://i.giphy.com/fdcibA8CVjFFS.gif",
+    "http://i.giphy.com/kleeBtj07a8Hm.gif",
+    "http://i.giphy.com/Izax1XmI4xxjG.gif",
+    "http://i.giphy.com/eNB5aypC0PZO8.gif",
+    "http://i.giphy.com/gw1MLBwO6YRuE.gif",
+    "http://i.giphy.com/da2OpnZvgTBu0.gif",
     # strictly top gun from here on down
     "http://media.giphy.com/media/KAfAT700n1DXO/giphy.gif",
     "http://media1.giphy.com/media/tzDutJyEkY0Yo/giphy.gif",
