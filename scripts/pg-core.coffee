@@ -177,10 +177,9 @@ module.exports = (robot) ->
     })
 
     song = msg.match[1]
-    if (song != "1" && song != "2" && song != "3") {
+    if (song != "1" && song != "2" && song != "3")
       msg.send "I can't play that song, sorry! (use songs 1, 2, or 3)"
       return
-    }
 
     # Wait to connect
     msg.send "Connecting to the tower..."
