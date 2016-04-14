@@ -79,6 +79,12 @@ module.exports = (robot) ->
   robot.on "pg-tower-on", (data) ->
     robot.messageRoom "#pgbot-test", "The :pg: tower is back online!"
 
+  robot.respond /button undo/i, (msg) ->
+    console.log("Responding to message: '#{msg.message.text}'")
+    msg.reply "OK, undoing the most recent button press! :cry:"
+    robot.brain.data.button.events.shift()
+    robot.brain.data.button.total -= 1
+
   robot.respond /button stats/i, (msg) ->
     console.log("Responding to message: '#{msg.message.text}'")
     total = robot.brain.data.button.total
