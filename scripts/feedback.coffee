@@ -5,16 +5,18 @@
 #   None
 #
 # Configuration:
-#   PATHGATHER_ROOT_URL
-#   PATHGATHER_AUTH_TOKEN
-#   PATHGATHER_SUBDOMAIN
+#   PG_FRESH_BACKEND_URL
+#   PG_FRESH_FRONTEND_URL
+#   PG_FRESH_AUTH_TOKEN
+#   PG_FRESH_SUBDOMAIN
 #
 # Commands:
 #   Hubot feedback|insight|recognize @user - send some feedback to Pathgather
 
-PATHGATHER_ROOT_URL = process.env.PATHGATHER_ROOT_URL # "http://localhost:5000/feedback"
-PATHGATHER_AUTH_TOKEN = process.env.PATHGATHER_AUTH_TOKEN
-PATHGATHER_SUBDOMAIN = process.env.PATHGATHER_SUBDOMAIN
+PG_FRESH_BACKEND_URL = process.env.PG_FRESH_BACKEND_URL
+PG_FRESH_FRONTEND_URL = process.env.PG_FRESH_FRONTEND_URL
+PG_FRESH_AUTH_TOKEN = process.env.PG_FRESH_AUTH_TOKEN
+PG_FRESH_SUBDOMAIN = process.env.PG_FRESH_SUBDOMAIN
 
 module.exports = (robot) ->
 
@@ -25,7 +27,7 @@ module.exports = (robot) ->
       "Let's make a GOOOOAAAALLLL out of this!",
       "Great 2 b cing micro-burst feedback happening!"
     ]
-    return messages[Math.floor(Math.random() * messages.length)]
+    return msg.random messages
 
   robot.respond /(feedback|insight|recognize) +(@\w+)/i, (msg) ->
 
@@ -45,9 +47,9 @@ module.exports = (robot) ->
         author_email = brain_user.email_address
 
     client = msg
-      .http("#{PATHGATHER_ROOT_URL}/feedback")
-      .header("Authorization", "Bearer #{PATHGATHER_AUTH_TOKEN}")
-      .header("PG-Subdomain", PATHGATHER_SUBDOMAIN)
+      .http("#{PG_FRESH_BACKEND_URL}/feedback")
+      .header("Authorization", "Bearer #{PG_FRESH_AUTH_TOKEN}")
+      .header("PG-Subdomain", PG_FRESH_SUBDOMAIN)
       .header("Content-Type", "application/json")
       .post(JSON.stringify({
         user_email: user_email,
@@ -69,5 +71,5 @@ module.exports = (robot) ->
         feedback_id = parse_body?.feedback_id
         message_start = getMessageStart()
         msg.send """#{message_start} #{author} gave some #{sentiment} to #{user}!
-          #{PATHGATHER_ROOT_URL}/feedback/#{feedback_id}"""
+          #{PG_FRESH_FRONTEND_URL}/#/feedback/#{feedback_id}"""
       )
