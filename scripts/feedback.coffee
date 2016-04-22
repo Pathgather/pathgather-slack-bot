@@ -20,7 +20,7 @@ PG_FRESH_SUBDOMAIN = process.env.PG_FRESH_SUBDOMAIN
 
 module.exports = (robot) ->
 
-  getMessageStart = () ->
+  getMessageStart = (msg) ->
     messages = [
       "What a collaborative environment!",
       "Annual performance reviews are so 2015.",
@@ -69,7 +69,7 @@ module.exports = (robot) ->
           return msg.send "Red alert! Couldn't parse the body: #{body}"
 
         feedback_id = parse_body?.feedback_id
-        message_start = getMessageStart()
+        message_start = getMessageStart(msg)
         msg.send """#{message_start} #{author} gave some #{sentiment} to #{user}!
           #{PG_FRESH_FRONTEND_URL}/#/feedback/#{feedback_id}"""
       )
