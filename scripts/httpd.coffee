@@ -34,7 +34,7 @@ module.exports = (robot) ->
         room = req.params.room || "dev"
         text = req.body.text
 
-        robot.send "#" + room, text
+        robot.messageRoom "#" + room, text
         res.end ";)"
       else
         res.end ":("
