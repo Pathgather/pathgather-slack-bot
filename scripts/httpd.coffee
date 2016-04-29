@@ -33,8 +33,11 @@ module.exports = (robot) ->
       if req.body.text && req.body.token && req.body.token == process.env.HUBOT_SAY_TOKEN
         room = req.params.room || "dev"
         text = req.body.text
+        delay = req.body.delay || 0
 
-        robot.messageRoom "#" + room, text
+        sayMessage = -> robot.messageRoom "#" + room, text
+        setTimeout(sayMessage, delay * 1000)
+
         res.end ";)"
       else
         res.end ":("
