@@ -12,6 +12,7 @@
 #
 # URLS:
 #   /hubot/version
+#   /hubot/say/:room
 #   /hubot/ping
 #   /hubot/time
 #   /hubot/info
@@ -26,6 +27,16 @@ module.exports = (robot) ->
 
   robot.router.post "/hubot/ping", (req, res) ->
     res.end "PONG"
+
+  robot.router.post "/hubot/say/:room?", (req, res) ->
+    if req.body.text && req.body.token && req.body.token == process.env.HUBOT_SAY_TOKEN
+      room = req.params.room || "dev"
+      text = req.body.text
+
+      robot.send "#" + room, text
+      res.end ";)"
+    else
+      res.end ":("
 
   robot.router.get "/hubot/time", (req, res) ->
     res.end "Server time is: #{new Date()}"
