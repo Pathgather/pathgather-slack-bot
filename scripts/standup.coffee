@@ -7,6 +7,7 @@
 #   Hubot standup me - Responds with a Hangout link and the order of speakers
 
 getStandupUsers = (robot) ->
+  return [{ name: "erik" }, { name: "john" }, { name: "neville" }]
   # TODO: limit to only users in the current room
   users = []
   console.log "Try to get standup users via slack client..."
@@ -31,8 +32,13 @@ getStandupUsers = (robot) ->
 
 getUserName = (name) ->
   console.log "get user name: #{name}"
-  # If the user has an emoji, randomly replace their standup name with it every now and then
-  if name in ["jamie", "eric", "john", "mansi", "guntars", "chris"] && (Math.random() > 0.7)
+
+  if name == "erik" && (Math.random() > 0.8)
+    # If it's Erik, substitute some nicknames where possible
+    nicks = ["e3", "e2v2", "e2", "k-rock", "k-money", "easy-rider", "big-country", "miami-kevin"]
+    nicks[Math.floor(Math.random() * nicks.length)]
+  else if name in ["jamie", "eric", "john", "mansi", "guntars", "chris", "erik"] && (Math.random() > 0.7)
+    # If the user has an emoji, randomly replace their standup name with it every now and then
     ":#{name}:"
   else
     name
