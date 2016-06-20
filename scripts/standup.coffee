@@ -7,7 +7,6 @@
 #   Hubot standup me - Responds with a Hangout link and the order of speakers
 
 getStandupUsers = (robot) ->
-  return [{ name: "erik" }, { name: "john" }, { name: "neville" }]
   # TODO: limit to only users in the current room
   users = []
   console.log "Try to get standup users via slack client..."
