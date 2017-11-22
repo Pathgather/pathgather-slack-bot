@@ -94,7 +94,7 @@ module.exports = (robot) ->
     if robot.brain.data.standup.last_timestamp?
       last_date = new Date(robot.brain.data.standup.last_timestamp)
     date = new Date()
-    if true || last_date? && last_date.toDateString() != date.toDateString()
+    if last_date? && last_date.toDateString() != date.toDateString()
       # Last standup was on a different calendar day; cycle the order
       names.push(names.shift())
 
