@@ -18,7 +18,7 @@ SPARK_ACCESS_TOKEN = process.env.SPARK_ACCESS_TOKEN
 SPARK_TOWER_CORE_ID = process.env.SPARK_TOWER_CORE_ID
 LIFX_ACCESS_TOKEN = process.env.LIFX_ACCESS_TOKEN
 PG_ORANGE = "hue:18 saturation:0.91 brightness:0.4"
-PG_BLUE = "hue:213 saturation:0.79 brightness:0.61"
+PG_BLUE = "hue:196 saturation:0.90 brightness:0.4"
 LIGHT_ID_1 = "id:d073d510f5c3"
 LIGHT_ID_2 = "id:d073d511faed"
 
